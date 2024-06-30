@@ -1,18 +1,14 @@
 <template>
-  <div
-    class="workplace-item"
-    v-for="work in workplaces"
-    :key="work.workPlaceId"
-  >
-    <div class="wokrpalce--id">{{ work.workPlaceId }}</div>
-    <div class="workplace--worker">{{ work.workerId }}</div>
+  <div class="workplace-item">
+    <div class="wokrpalce--id">{{ props.workplace.workPlaceId }} aboba1</div>
+    <div class="workplace--worker">{{ props.workplace.workerId }}</div>
   </div>
 </template>
 <script lang="ts" setup>
-import { IOffice, IWorkPlace } from "./models/office.model";
+import { IWorkPlace } from "./models/office.model";
 import { Office } from "./services/office.service";
 const props = defineProps<{
-  workplaces: Array<IWorkPlace>;
+  workplace: IWorkPlace;
 }>();
-console.log(props.workplaces);
+// console.log(props.workplaces);
 </script>

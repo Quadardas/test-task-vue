@@ -6,17 +6,18 @@
 
 <script lang="ts" setup>
 import CabinetItem from "@/components/CabinetItem.vue";
-import { IWorkPlace } from "@/components/models/office.model";
+import { IOffice, IWorkPlace } from "@/components/models/office.model";
 import { Office } from "@/components/services/office.service";
 import { onBeforeMount, ref } from "vue";
 
+const offices = ref<IOffice[]>([]);
 const workplaces = ref<Array<IWorkPlace>>([]);
 const officeService = new Office();
 
 onBeforeMount(async () => {
   const offices = officeService.getOffices;
   workplaces.value = await officeService.getWorkPlaces(1);
-  console.log(offices);
+  console.log(workplaces.value);
 });
 // const aboba = [
 //   {
