@@ -11,4 +11,5 @@ export interface IWorkPlace {
   equipment: string | null;
   officeWork: boolean;
   schedule: string | null;
+  status: boolean;
 }

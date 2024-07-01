@@ -1,57 +1,93 @@
 <template>
   <div class="container">
-    <CabinetItem />
+    <OfficeItem
+      v-for="office in officeService.getOffices"
+      :key="office?.officeId"
+      :office="office"
+      @click="openOffice(office?.officeId)"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import CabinetItem from "@/components/CabinetItem.vue";
-import { IOffice, IWorkPlace } from "@/components/models/office.model";
+import OfficeItem from "@/components/OfficeItem.vue";
 import { Office } from "@/components/services/office.service";
-import { onBeforeMount, ref } from "vue";
+import router from "@/router";
+import { ref } from "vue";
 
-const offices = ref<IOffice[]>([]);
-const workplaces = ref<Array<IWorkPlace>>([]);
+const openOffice = (id: number) => {
+  router.push(`/office/${id}`);
+};
+
 const officeService = new Office();
 
-onBeforeMount(async () => {
-  const offices = officeService.getOffices;
-  workplaces.value = await officeService.getWorkPlaces(1);
-  console.log(workplaces.value);
-});
 // const aboba = [
 //   {
 //     officeId: 1,
 //     workplacesId: [1, 2],
+//   },
+//   {
+//     officeId: 2,
+//     workplacesId: [3, 4],
 //   },
 // ];
 // const aboba1 = [
 //   {
 //     workPlaceId: 1,
 //     workerId: 1,
-//     equipment: "jija",
+//     equipment: "КАМПУКТЕР",
 //     officeWork: true,
 //     schedule: "всегда",
+//     status: true,
 //   },
 //   {
 //     workPlaceId: 2,
 //     workerId: 2,
-//     equipment: "jija322",
+//     equipment: "НЕТ КАМПУКТЕРА",
 //     officeWork: true,
 //     schedule: "по субботам",
+//     status: true,
+//   },
+//   {
+//     workPlaceId: 3,
+//     workerId: 3,
+//     equipment: "2 КАМПУКТЕРА",
+//     officeWork: true,
+//     schedule: "всегда",
+//     status: true,
+//   },
+//   {
+//     workPlaceId: 4,
+//     workerId: 4,
+//     equipment: "3 КАМПУКТЕРА",
+//     officeWork: true,
+//     schedule: "по субботам",
+//     status: true,
 //   },
 // ];
 
 // const aboba2 = [
 //   {
 //     workerId: 1,
-//     name: "asdasd",
+//     name: "Александр",
 //     workerRole: "aboba",
 //     birthday: new Date(),
 //   },
 //   {
 //     workerId: 2,
-//     name: "ahahahah",
+//     name: "ВИКТОР",
+//     workerRole: "aboba",
+//     birthday: new Date(),
+//   },
+//   {
+//     workerId: 3,
+//     name: "НИКИТА",
+//     workerRole: "aboba",
+//     birthday: new Date(),
+//   },
+//   {
+//     workerId: 4,
+//     name: "АБОБА",
 //     workerRole: "aboba",
 //     birthday: new Date(),
 //   },
@@ -59,7 +95,14 @@ onBeforeMount(async () => {
 
 // onBeforeMount(() => {
 //   localStorage.setItem("office", JSON.stringify(aboba));
-//   localStorage.setItem("workplaces", JSON.stringify(aboba1));
+// localStorage.setItem("workplaces", JSON.stringify(aboba1));
 //   localStorage.setItem("workers", JSON.stringify(aboba2));
 // });
 </script>
+
+<style lang="scss">
+img {
+  width: 700px;
+  height: 500px;
+}
+</style>
