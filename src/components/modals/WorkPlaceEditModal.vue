@@ -35,11 +35,11 @@
           label="Оборудование"
         />
         <!-- <VaSelect
-          v-model="workplace.officeWork"
-          :options="userRoles"
-          :rules="[(v) => v || 'Field is required']"
-          label="Роль сотрудника"
-        /> -->
+            v-model="workplace.officeWork"
+            :options="userRoles"
+            :rules="[(v) => v || 'Field is required']"
+            label="Роль сотрудника"
+          /> -->
 
         <VaInput
           v-model="workplace.schedule"

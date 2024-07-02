@@ -1,5 +1,5 @@
 <template>
-  <div class="workplace-item">
+  <div class="workplace-item" v-if="workplace.status">
     <div class="wokrpalce--id">{{ workplace.workPlaceId }}</div>
     <div class="workplace--worker">{{ worker?.name }}</div>
     <div v-if="showDetails">

@@ -85,33 +85,74 @@ export class Office {
     return data;
   }
 
-  async getLastWorkplaceId(): Promise<number> {
+  async getNewWorkplaceId(): Promise<number> {
     const promise = new Promise<number>((resolve, reject) => {
       const workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
       if (workplaces) {
-        const lastWorkplace = workplaces[workplaces.length - 1];
-        resolve(lastWorkplace.workPlaceId);
+        const lastWorkplace = Math.max(
+          ...workplaces.map((wp: any) => wp.workPlaceId)
+        );
+        resolve(lastWorkplace + 1);
       } else {
-        reject("No workplaces found");
+        reject(0);
       }
     });
     const data = await promise;
+    //console.log(data);
     return data;
   }
 
-  async getLastWorkerId(): Promise<number> {
+  async getNewWorkerId(): Promise<number> {
     const promise = new Promise<number>((resolve, reject) => {
       const workers = JSON.parse(localStorage.getItem("workers") || "[]");
-      if (workers) {
-        const lastWorker = workers[workers.length - 1];
-        resolve(lastWorker.workerId);
+      if (workers.length > 0) {
+        const lastWorkerId = Math.max(
+          ...workers.map((worker: any) => worker.workerId)
+        );
+        resolve(lastWorkerId + 1);
       } else {
-        reject("No workers found");
+        resolve(1);
       }
     });
-    const data = await promise;
-    // console.log(data, "это промис");
 
+    const data = await promise;
+    //console.log(data);
     return data;
+  }
+
+  async createNewWorkplace(
+    worker: IWorker,
+    workplace: IWorkPlace,
+    officeId: number
+  ) {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        const officeData = JSON.parse(localStorage.getItem("office") || "[]");
+        const workplacesData = JSON.parse(
+          localStorage.getItem("workplaces") || "[]"
+        );
+        const workersData = JSON.parse(localStorage.getItem("workers") || "[]");
+        workersData.push(worker);
+        workplacesData.push(workplace);
+        const officeIndex = officeData.findIndex(
+          (office: any) => office.officeId === officeId
+        );
+        if (officeIndex !== -1) {
+          officeData[officeIndex].workplacesId.push(workplace.workPlaceId);
+        } else {
+          reject("Office not found");
+          return;
+        }
+        localStorage.setItem("office", JSON.stringify(officeData));
+        localStorage.setItem("workplaces", JSON.stringify(workplacesData));
+        localStorage.setItem("workers", JSON.stringify(workersData));
+
+        resolve("Data successfully updated!");
+      } catch (error) {
+        reject("Error updating data: " + error);
+      }
+    });
+
+    return promise;
   }
 }

@@ -3,14 +3,19 @@
     <Transition name="modal">
       <div v-if="show" class="modal-mask">
         <div class="modal-container">
-          <button class="modal-container__close close" @click="$emit('close')">
-            <span class="material-symbols-outlined"> close </span>
-          </button>
+          <VaButton
+            class="modal-container__close close"
+            @click="$emit('close')"
+            preset="secondary"
+            hover-behavior="opacity"
+            :hover-opacity="0.4"
+          >
+            Закрыть
+          </VaButton>
           <div>
             <div class="modal-header">
               <slot name="header">default header</slot>
             </div>
-
             <component
               v-if="modalComponent"
               :is="modalComponent"
@@ -18,7 +23,6 @@
               v-bind="componentProps"
               @update="onCustomEvent"
             />
-
             <div v-else class="modal-body">
               <slot name="body">default body</slot>
             </div>
@@ -46,7 +50,6 @@ withDefaults(
   defineProps<{
     show: boolean;
     okButtonText: string;
-
     modalComponent?: Component;
     hideOkButton?: boolean;
     componentProps?: any;
@@ -72,7 +75,7 @@ function onCustomEvent() {
 <style lang="scss" scoped>
 .modal-mask {
   position: fixed;
-  z-index: 9998;
+  z-index: 1;
   top: 0;
   left: 0;
   width: 100%;
@@ -83,7 +86,7 @@ function onCustomEvent() {
 }
 
 .modal-container {
-  height: 55%;
+  height: 60%;
   width: 50%;
   max-width: 100%;
   min-width: 500px;
@@ -119,15 +122,6 @@ function onCustomEvent() {
 .modal-default-button {
   float: right;
 }
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
 
 .modal-enter-from {
   opacity: 0;

@@ -13,7 +13,7 @@
 import OfficeItem from "@/components/OfficeItem.vue";
 import { Office } from "@/components/services/office.service";
 import router from "@/router";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 
 const openOffice = (id: number) => {
   router.push(`/office/${id}`);
@@ -64,6 +64,14 @@ const officeService = new Office();
 //     schedule: "по субботам",
 //     status: true,
 //   },
+//   {
+//     workPlaceId: 5,
+//     workerId: 5,
+//     equipment: "4 КАМПУКТЕРА",
+//     officeWork: true,
+//     schedule: "никогда",
+//     status: false,
+//   },
 // ];
 
 // const aboba2 = [
@@ -95,7 +103,7 @@ const officeService = new Office();
 
 // onBeforeMount(() => {
 //   localStorage.setItem("office", JSON.stringify(aboba));
-// localStorage.setItem("workplaces", JSON.stringify(aboba1));
+//   localStorage.setItem("workplaces", JSON.stringify(aboba1));
 //   localStorage.setItem("workers", JSON.stringify(aboba2));
 // });
 </script>
