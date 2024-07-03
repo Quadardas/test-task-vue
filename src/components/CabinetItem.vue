@@ -4,24 +4,25 @@
       v-for="work in workplaces"
       :key="work.workPlaceId"
       :workplace="work"
-      @click="editWorkplace"
+      @click="editWorkplace(work)"
     />
     <VaButton
       v-if="props.office.officeId === +route.params.id"
       class="new-workplace"
-      @click="openWorkplace"
+      @click="newWorkplace"
       icon="add"
       color="#DEE5F2"
       icon-color="#154EC1"
     />
-    <Modal
+    <WorkplaceModal
       :show="showModal"
-      :modal-component="WorkplaceModal"
+      :isEdit="isEdit"
+      :component-props="{
+        workplace: selectedWorkplace,
+      }"
       @close="showModal = false"
       @ok="showModal = false"
-    >
-      <template #body> <WorkplaceModal :workplaces="workplaces" /> </template
-    ></Modal>
+    />
   </div>
 </template>
 
@@ -31,9 +32,12 @@ import { onBeforeMount, ref } from "vue";
 import { IOffice, IWorkPlace } from "./models/office.model";
 import router from "@/router";
 import WorkplaceModal from "@/components/modals/WorkplaceModal.vue";
+
 import { useRoute } from "vue-router";
 
 const showModal = ref(false);
+const isEdit = ref(false);
+const selectedWorkplace = ref();
 
 const route = useRoute();
 const props = defineProps<{
@@ -41,12 +45,15 @@ const props = defineProps<{
   office: IOffice;
 }>();
 
-const openWorkplace = () => {
+const newWorkplace = () => {
+  isEdit.value = false;
   showModal.value = true;
-  console.log(showModal.value);
 };
-const editWorkplace = () => {
+const editWorkplace = (work: IWorkPlace) => {
+  selectedWorkplace.value = work;
+  isEdit.value = true;
   showModal.value = true;
+  console.log(selectedWorkplace.value);
 };
 </script>
 

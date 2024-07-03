@@ -36,8 +36,6 @@ export class Office {
     return data;
   }
   public async getWorkPlaces(officeId: number): Promise<IWorkPlace[]> {
-    //console.log(officeId, "это гет воркплейс");
-
     const promise = new Promise<IWorkPlace[]>((resolve, reject) => {
       const officeData = JSON.parse(localStorage.getItem("office") || "[]");
       const workplacesData = JSON.parse(
@@ -57,7 +55,26 @@ export class Office {
     });
 
     const data = await promise;
-    // console.log("aboba");
+
+    return data;
+  }
+  public async getOneWorkplace(workplaceId: number): Promise<IWorkPlace[]> {
+    const promise = new Promise<IWorkPlace[]>((resolve, reject) => {
+      const workplacesData = JSON.parse(
+        localStorage.getItem("workplaces") || "[]"
+      );
+      const workplace = workplacesData.find(
+        (workplaceId: IWorkPlace) => (workplacesData.workPlaceId = workplaceId)
+      );
+      if (!workplace) {
+        reject(new Error(`Office with id ${workplaceId} not found`));
+      }
+
+      resolve(workplace);
+    });
+
+    const data = await promise;
+    // console.log(data);
 
     return data;
   }
