@@ -1,5 +1,6 @@
 <template>
   <router-link to="/">Карта</router-link>
+  <router-link to="/admin">Admin</router-link>
   <router-view />
 </template>
 

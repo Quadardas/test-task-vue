@@ -25,10 +25,12 @@ const officeService = new Office();
 //   {
 //     officeId: 1,
 //     workplacesId: [1, 2],
+//     maxWorkplaces: 3,
 //   },
 //   {
 //     officeId: 2,
 //     workplacesId: [3, 4],
+//     maxWorkplaces: 2,
 //   },
 // ];
 // const aboba1 = [
@@ -99,12 +101,18 @@ const officeService = new Office();
 //     workerRole: "aboba",
 //     birthday: new Date(),
 //   },
+//   {
+//     workerId: 5,
+//     name: "ЖИЖА",
+//     workerRole: "aboba",
+//     birthday: new Date(),
+//   },
 // ];
 
 // onBeforeMount(() => {
-//   localStorage.setItem("office", JSON.stringify(aboba));
+// localStorage.setItem("office", JSON.stringify(aboba));
 //   localStorage.setItem("workplaces", JSON.stringify(aboba1));
-//   localStorage.setItem("workers", JSON.stringify(aboba2));
+// localStorage.setItem("workers", JSON.stringify(aboba2));
 // });
 </script>
 

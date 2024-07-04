@@ -7,7 +7,10 @@
       @click="editWorkplace(work)"
     />
     <VaButton
-      v-if="props.office.officeId === +route.params.id"
+      v-if="
+        props.office.officeId === +route.params.id &&
+        workplaces.length != office.maxWorkplaces
+      "
       class="new-workplace"
       @click="newWorkplace"
       icon="add"
@@ -50,10 +53,10 @@ const newWorkplace = () => {
   showModal.value = true;
 };
 const editWorkplace = (work: IWorkPlace) => {
-  selectedWorkplace.value = work;
-  isEdit.value = true;
-  showModal.value = true;
-  console.log(selectedWorkplace.value);
+  // selectedWorkplace.value = work;
+  // isEdit.value = true;
+  // showModal.value = true;
+  // console.log(selectedWorkplace.value);
 };
 </script>
 

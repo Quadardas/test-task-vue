@@ -20,7 +20,7 @@ const props = defineProps<{
 
 onBeforeMount(async () => {
   if (props.office) {
-    workplaces.value = await officeService.getWorkPlaces(
+    workplaces.value = await officeService.getWorkPlacesInOffice(
       props.office?.officeId
     );
   }

@@ -1,0 +1,81 @@
+<template>
+  <div class="container-admin">
+    <div class="worker-list">
+      <p>Список работников</p>
+      <WorkerItem
+        v-for="worker in workers"
+        :key="worker.workerId"
+        :worker="worker"
+      />
+    </div>
+    <div class="workplace-list">
+      <p>Список рабочих мест</p>
+      <WorkplaceItem
+        v-for="work in workplaces"
+        :key="work.workPlaceId"
+        :workplace="work"
+        :showDetails="true"
+        @click="editWorkplace(work)"
+      />
+    </div>
+    <div class="request-list">
+      <p>Заявки</p>
+      <WorkplaceItem
+        v-for="work in requestWorkplaces"
+        :key="work.workPlaceId"
+        :workplace="work"
+        :showDetails="true"
+      />
+      <WorkplaceModal
+        :show="showModal"
+        :isEdit="isEdit"
+        :component-props="{
+          workplace: selectedWorkplace,
+        }"
+        @close="showModal = false"
+        @ok="showModal = false"
+      />
+    </div>
+  </div>
+</template>
+<script lang="ts" setup>
+import { onBeforeMount, ref } from "vue";
+import { IWorker } from "../components/models/worker.model";
+import { Office } from "../components/services/office.service";
+import WorkerItem from "../components/WorkerItem.vue";
+import WorkplaceItem from "../components/WorkplaceItem.vue";
+import { IOffice, IWorkPlace } from "@/components/models/office.model";
+import WorkplaceModal from "@/components/modals/WorkplaceModal.vue";
+const office = new Office();
+const workers = ref<Array<IWorker>>();
+const workplaces = ref<Array<IWorkPlace>>();
+const requestWorkplaces = ref<Array<IWorkPlace>>();
+
+const showModal = ref(false);
+const isEdit = ref(false);
+const selectedWorkplace = ref();
+const editWorkplace = (work: IWorkPlace) => {
+  selectedWorkplace.value = work;
+  isEdit.value = true;
+  showModal.value = true;
+  console.log(selectedWorkplace.value);
+};
+onBeforeMount(async () => {
+  workers.value = await office.getAllWorkers();
+  workplaces.value = await office.getAllWorkPlaces();
+  requestWorkplaces.value = await office.getRequestWorkplace();
+  console.log(requestWorkplaces.value, "Заявки");
+});
+</script>
+<style lang="scss">
+.container-admin {
+  display: flex;
+  flex-wrap: wrap;
+  .worker-list {
+    width: 50%;
+  }
+  .workplace-list {
+    width: 50%;
+  }
+}
+</style>

@@ -76,6 +76,7 @@ const showModal = ref(false);
 const worker = ref<IWorker>();
 const workplace = ref<IWorkPlace>();
 const workplaceEdit = ref<IWorkPlace>();
+const workerEdit = ref<IWorker>();
 
 const props = defineProps<{
   isEdit: boolean;
@@ -114,7 +115,7 @@ worker.value = {
 
 workplace.value = {
   workPlaceId: NaN,
-  workerId: null,
+  workerId: 0,
   equipment: "",
   officeWork: true,
   schedule: "",
@@ -162,7 +163,22 @@ onBeforeMount(async () => {
   //   workplaceEdit.value = await office.getOneWorkplace(
   //     props.selectedWorkplace.workPlaceId
   //   );
-  //   console.log(workplaceEdit.value);
+  //   workerEdit.value = await office.getWorker(props.selectedWorkplace.workerId);
+  //   worker.value = {
+  //     workerId: workerEdit.value?.workerId,
+  //     name: workerEdit.value?.name,
+  //     workerRole: workerEdit.value?.workerRole,
+  //     birthday: workerEdit.value?.birthday,
+  //   };
+
+  //   workplace.value = {
+  //     workPlaceId: workplaceEdit.value?.workPlaceId,
+  //     workerId: workplaceEdit.value?.workerId,
+  //     equipment: workplaceEdit.value?.equipment,
+  //     officeWork: workplaceEdit.value?.officeWork,
+  //     schedule: workplaceEdit.value?.schedule,
+  //     status: workplaceEdit.value?.status,
+  //   };
   // }
   newWorkerId.value = await office.getNewWorkerId();
   newWorkplaceId.value = await office.getNewWorkplaceId();

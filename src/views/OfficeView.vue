@@ -11,7 +11,6 @@ import { IOffice } from "@/components/models/office.model";
 import { Office } from "@/components/services/office.service";
 import { onBeforeMount, ref } from "vue";
 
-const showDetails = ref(false);
 const office = ref<IOffice>();
 const officeService = new Office();
 

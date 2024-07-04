@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import OfficeItem from "@/components/OfficeItem.vue";
 import OfficeView from "@/views/OfficeView.vue";
 import WorkplaceView from "@/views/WorkplaceView.vue";
+import AdminView from "@/views/AdminView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -13,6 +14,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/office/:id",
     name: "office",
     component: OfficeView,
+  },
+  {
+    path: "/admin",
+    name: "admin",
+    component: AdminView,
   },
 ];
 

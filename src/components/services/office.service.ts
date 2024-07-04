@@ -35,7 +35,7 @@ export class Office {
 
     return data;
   }
-  public async getWorkPlaces(officeId: number): Promise<IWorkPlace[]> {
+  public async getWorkPlacesInOffice(officeId: number): Promise<IWorkPlace[]> {
     const promise = new Promise<IWorkPlace[]>((resolve, reject) => {
       const officeData = JSON.parse(localStorage.getItem("office") || "[]");
       const workplacesData = JSON.parse(
@@ -67,7 +67,7 @@ export class Office {
         (workplaceId: IWorkPlace) => (workplacesData.workPlaceId = workplaceId)
       );
       if (!workplace) {
-        reject(new Error(`Office with id ${workplaceId} not found`));
+        reject(new Error(`Workplace with id ${workplaceId} not found`));
       }
 
       resolve(workplace);
@@ -75,6 +75,36 @@ export class Office {
 
     const data = await promise;
     // console.log(data);
+
+    return data;
+  }
+  public async getAllWorkPlaces(): Promise<IWorkPlace[]> {
+    const promise = new Promise<IWorkPlace[]>((resolve, reject) => {
+      const workplacesData = JSON.parse(
+        localStorage.getItem("workplaces") || "[]"
+      );
+      resolve(workplacesData);
+      reject(new Error(`Workplaces not found`));
+    });
+
+    const data = await promise;
+
+    return data;
+  }
+  public async getRequestWorkplace(): Promise<IWorkPlace[]> {
+    const promise = new Promise<IWorkPlace[]>((resolve, reject) => {
+      const workplacesData = JSON.parse(
+        localStorage.getItem("workplaces") || "[]"
+      );
+      const newWorkplace = workplacesData.find(
+        (workplace: IWorkPlace) => workplace.status === false
+      );
+
+      resolve(newWorkplace);
+      reject(new Error(`Workplaces not found`));
+    });
+
+    const data = await promise;
 
     return data;
   }
@@ -89,7 +119,7 @@ export class Office {
         (workplace: any) => workplace.workPlaceId === workplaceId
       );
       if (!workplace) {
-        reject(new Error(`Workplace with id ${workplaceId} not found`));
+        reject(new Error(`not found`));
         return;
       }
       const workers = workersData.filter(
@@ -171,5 +201,15 @@ export class Office {
     });
 
     return promise;
+  }
+
+  async getAllWorkers(): Promise<IWorker> {
+    const promise = new Promise<IWorker>((resolve, reject) => {
+      const workers = JSON.parse(localStorage.getItem("workers") || "[]");
+      resolve(workers);
+      reject("No workers");
+    });
+    const data = await promise;
+    return data;
   }
 }
