@@ -24,7 +24,7 @@ const officeService = new Office();
 // const aboba = [
 //   {
 //     officeId: 1,
-//     workplacesId: [1, 2],
+//     workplacesId: [1, 2, 5],
 //     maxWorkplaces: 3,
 //   },
 //   {
@@ -110,9 +110,9 @@ const officeService = new Office();
 // ];
 
 // onBeforeMount(() => {
-// localStorage.setItem("office", JSON.stringify(aboba));
+//   localStorage.setItem("office", JSON.stringify(aboba));
 //   localStorage.setItem("workplaces", JSON.stringify(aboba1));
-// localStorage.setItem("workers", JSON.stringify(aboba2));
+//   localStorage.setItem("workers", JSON.stringify(aboba2));
 // });
 </script>
 

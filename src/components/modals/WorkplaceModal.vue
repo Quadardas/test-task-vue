@@ -129,8 +129,8 @@ const okButtonClick = async () => {
     worker.value.workerId = newWorkerId.value;
     workplace.value.workPlaceId = newWorkplaceId.value;
     workplace.value.workerId = newWorkerId.value;
-    // office.createNewWorkplace(worker.value, workplace.value, +route.params.id);
-    await console.log(workplace.value, worker.value);
+    office.createNewWorkplace(worker.value, workplace.value, +route.params.id);
+    // await console.log(workplace.value, worker.value);
   }
 };
 

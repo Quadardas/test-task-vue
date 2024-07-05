@@ -1,5 +1,5 @@
 <template>
-  <VaCard class="workplace-item" v-if="workplace.status">
+  <VaCard class="workplace-item">
     <VaCardTitle class="wokrplace--id"
       >ID рабочего места: {{ workplace.workPlaceId }}</VaCardTitle
     >
@@ -14,10 +14,18 @@
         </div>
       </div>
     </VaCardContent>
+    <VaButtonGroup v-if="!workplace.status" class="button-group">
+      <VaButton @click="acceptRequest(workplace.workPlaceId)">
+        Принять
+      </VaButton>
+      <VaButton @click="declineRequest(workplace.workPlaceId)" color="danger">
+        Отклонить
+      </VaButton>
+    </VaButtonGroup>
   </VaCard>
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import { IOffice, IWorkPlace } from "./models/office.model";
 import { Office } from "./services/office.service";
 import { IWorker } from "./models/worker.model";
@@ -26,23 +34,34 @@ const props = defineProps<{
   workplace: IWorkPlace;
   showDetails: boolean;
 }>();
-const worker = ref<IWorker | null>();
-onBeforeMount(async () => {
-  try {
-    const workers = await officeService.getWorker(props.workplace.workPlaceId);
+const worker = ref<IWorker>();
+const emit = defineEmits(["status-updated"]);
 
-    if (workers.length > 0) {
-      worker.value = workers[0];
-    }
+async function acceptRequest(wokrplaceId: number) {
+  await officeService.acceptRequest(wokrplaceId);
+  emit("status-updated");
+}
+async function declineRequest(wokrplaceId: number) {
+  await officeService.declineRequest(wokrplaceId);
+  emit("status-updated");
+}
+
+onBeforeMount(async () => {
+  // console.log(props.workplace, "aboba");
+
+  try {
+    worker.value = await officeService.getWorker(props.workplace.workPlaceId);
   } catch (error) {
     console.error(error);
   }
 });
 </script>
+
 <style lang="scss" scoped>
 .workplace-item {
   margin: 10px;
-  height: 130px;
+  height: fit-content;
+  padding: 5px;
   .wokrplace--id {
     font-size: 16px;
   }
@@ -51,6 +70,8 @@ onBeforeMount(async () => {
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+  }
+  .button-group {
   }
 }
 </style>

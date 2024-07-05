@@ -47,14 +47,15 @@ export class Office {
       if (!office) {
         reject(new Error(`Office with id ${officeId} not found`));
       }
-
-      const workplaces = workplacesData.filter((workplace: IWorkPlace) =>
-        office.workplacesId.includes(workplace.workPlaceId)
+      const workplaces = workplacesData.filter(
+        (workplace: IWorkPlace) =>
+          office.workplacesId.includes(workplace.workPlaceId) &&
+          workplace.status === true
       );
       resolve(workplaces);
     });
-
     const data = await promise;
+    // console.log(data);
 
     return data;
   }
@@ -69,7 +70,6 @@ export class Office {
       if (!workplace) {
         reject(new Error(`Workplace with id ${workplaceId} not found`));
       }
-
       resolve(workplace);
     });
 
@@ -83,11 +83,15 @@ export class Office {
       const workplacesData = JSON.parse(
         localStorage.getItem("workplaces") || "[]"
       );
-      resolve(workplacesData);
+      const workplaces = workplacesData.filter(
+        (workplace: IWorkPlace) => workplace.status === true
+      );
+      resolve(workplaces);
       reject(new Error(`Workplaces not found`));
     });
 
     const data = await promise;
+    // console.log(data);
 
     return data;
   }
@@ -96,21 +100,71 @@ export class Office {
       const workplacesData = JSON.parse(
         localStorage.getItem("workplaces") || "[]"
       );
-      const newWorkplace = workplacesData.find(
+      const newWorkplace = workplacesData.filter(
         (workplace: IWorkPlace) => workplace.status === false
       );
-
       resolve(newWorkplace);
       reject(new Error(`Workplaces not found`));
     });
 
     const data = await promise;
+    // console.log(data);
 
     return data;
   }
 
-  public async getWorker(workplaceId: number): Promise<IWorker[]> {
-    const promise = new Promise<IWorker[]>((resolve, reject) => {
+  public async acceptRequest(workplaceId: number): Promise<IWorkPlace> {
+    const promise = new Promise<IWorkPlace>((resolve, reject) => {
+      const workplacesData = JSON.parse(
+        localStorage.getItem("workplaces") || "[]"
+      );
+      const requestWorkplace = workplacesData.find(
+        (workplace: IWorkPlace) => workplace.workPlaceId === workplaceId
+      );
+      if (requestWorkplace) {
+        requestWorkplace.status = true;
+        // console.log(requestWorkplace);
+        // console.log(workplacesData);
+        localStorage.setItem("workplaces", JSON.stringify(workplacesData));
+        resolve(requestWorkplace);
+      } else {
+        reject(
+          new Error(
+            `Workplace with id ${workplaceId} not found or already accepted`
+          )
+        );
+      }
+    });
+    const data = await promise;
+    // console.log(data);
+    return data;
+  }
+  public async declineRequest(workplaceId: number): Promise<IWorkPlace> {
+    const promise = new Promise<IWorkPlace>((resolve, reject) => {
+      const workplacesData = JSON.parse(
+        localStorage.getItem("workplaces") || "[]"
+      );
+      const requestWorkplace = workplacesData.filter(
+        (workplace: IWorkPlace) => workplace.workPlaceId !== workplaceId
+      );
+      if (requestWorkplace) {
+        localStorage.setItem("workplaces", JSON.stringify(requestWorkplace));
+        resolve(requestWorkplace);
+      } else {
+        reject(
+          new Error(
+            `Workplace with id ${workplaceId} not found or already accepted`
+          )
+        );
+      }
+    });
+    const data = await promise;
+    // console.log(data);
+    return data;
+  }
+
+  public async getWorker(workplaceId: number): Promise<IWorker> {
+    const promise = new Promise<IWorker>((resolve, reject) => {
       const workplacesData = JSON.parse(
         localStorage.getItem("workplaces") || "[]"
       );
@@ -122,13 +176,15 @@ export class Office {
         reject(new Error(`not found`));
         return;
       }
-      const workers = workersData.filter(
+      const worker = workersData.find(
         (worker: any) => worker.workerId === workplace.workerId
       );
-      resolve(workers);
+      resolve(worker);
     });
 
     const data = await promise;
+    // console.log(data);
+
     return data;
   }
 

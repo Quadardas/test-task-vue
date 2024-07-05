@@ -21,10 +21,11 @@
     <div class="request-list">
       <p>Заявки</p>
       <WorkplaceItem
-        v-for="work in requestWorkplaces"
-        :key="work.workPlaceId"
-        :workplace="work"
+        v-for="workplace in requestWorkplaces"
+        :key="workplace.workPlaceId"
+        :workplace="workplace"
         :showDetails="true"
+        @status-updated="updateWorkplaces"
       />
       <WorkplaceModal
         :show="showModal"
@@ -58,13 +59,17 @@ const editWorkplace = (work: IWorkPlace) => {
   selectedWorkplace.value = work;
   isEdit.value = true;
   showModal.value = true;
-  console.log(selectedWorkplace.value);
+  // console.log(selectedWorkplace.value);
+};
+const updateWorkplaces = async () => {
+  workplaces.value = await office.getAllWorkPlaces();
+  requestWorkplaces.value = await office.getRequestWorkplace();
 };
 onBeforeMount(async () => {
   workers.value = await office.getAllWorkers();
   workplaces.value = await office.getAllWorkPlaces();
   requestWorkplaces.value = await office.getRequestWorkplace();
-  console.log(requestWorkplaces.value, "Заявки");
+  // console.log(requestWorkplaces.value, "Заявки");
 });
 </script>
 <style lang="scss">
@@ -75,6 +80,9 @@ onBeforeMount(async () => {
     width: 50%;
   }
   .workplace-list {
+    width: 50%;
+  }
+  .request-list {
     width: 50%;
   }
 }
