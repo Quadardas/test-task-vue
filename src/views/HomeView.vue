@@ -82,37 +82,42 @@ const officeService = new Office();
 //     name: "Александр",
 //     workerRole: "aboba",
 //     birthday: new Date(),
+//     accessCode: "MTIzNDU2",
 //   },
 //   {
 //     workerId: 2,
 //     name: "ВИКТОР",
 //     workerRole: "aboba",
 //     birthday: new Date(),
+//     accessCode: 234567,
 //   },
 //   {
 //     workerId: 3,
 //     name: "НИКИТА",
 //     workerRole: "aboba",
 //     birthday: new Date(),
+//     accessCode: 345678,
 //   },
 //   {
 //     workerId: 4,
 //     name: "АБОБА",
 //     workerRole: "aboba",
 //     birthday: new Date(),
+//     accessCode: 456789,
 //   },
 //   {
 //     workerId: 5,
 //     name: "ЖИЖА",
 //     workerRole: "aboba",
 //     birthday: new Date(),
+//     accessCode: 567890,
 //   },
 // ];
 
 // onBeforeMount(() => {
 //   localStorage.setItem("office", JSON.stringify(aboba));
 //   localStorage.setItem("workplaces", JSON.stringify(aboba1));
-//   localStorage.setItem("workers", JSON.stringify(aboba2));
+// localStorage.setItem("workers", JSON.stringify(aboba2));
 // });
 </script>
 

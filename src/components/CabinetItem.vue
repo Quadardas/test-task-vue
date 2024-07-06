@@ -3,6 +3,8 @@
     <WorkplaceItem
       v-for="work in workplaces"
       :key="work.workPlaceId"
+      disable-button
+      :showDetails="!!route.params.id"
       :workplace="work"
       @click="editWorkplace(work)"
     />

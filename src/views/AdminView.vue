@@ -7,6 +7,12 @@
         :key="worker.workerId"
         :worker="worker"
       />
+      <VaButton @click="addWorker">Добавить</VaButton>
+      <WorkerCreate
+        :show="showModalWorker"
+        @close="showModalWorker = false"
+        @ok="showModalWorker = false"
+      />
     </div>
     <div class="workplace-list">
       <p>Список рабочих мест</p>
@@ -45,13 +51,16 @@ import { IWorker } from "../components/models/worker.model";
 import { Office } from "../components/services/office.service";
 import WorkerItem from "../components/WorkerItem.vue";
 import WorkplaceItem from "../components/WorkplaceItem.vue";
-import { IOffice, IWorkPlace } from "@/components/models/office.model";
+import { IWorkPlace } from "@/components/models/office.model";
 import WorkplaceModal from "@/components/modals/WorkplaceModal.vue";
+import WorkerCreate from "../components/modals/WorkerCreate.vue";
+import { useUserStore } from "../components/stores/user";
 const office = new Office();
 const workers = ref<Array<IWorker>>();
 const workplaces = ref<Array<IWorkPlace>>();
 const requestWorkplaces = ref<Array<IWorkPlace>>();
-
+const store = useUserStore();
+const showModalWorker = ref(false);
 const showModal = ref(false);
 const isEdit = ref(false);
 const selectedWorkplace = ref();
@@ -65,10 +74,16 @@ const updateWorkplaces = async () => {
   workplaces.value = await office.getAllWorkPlaces();
   requestWorkplaces.value = await office.getRequestWorkplace();
 };
+
+function addWorker() {
+  showModalWorker.value = true;
+}
 onBeforeMount(async () => {
   workers.value = await office.getAllWorkers();
   workplaces.value = await office.getAllWorkPlaces();
   requestWorkplaces.value = await office.getRequestWorkplace();
+  console.log(store);
+
   // console.log(requestWorkplaces.value, "Заявки");
 });
 </script>

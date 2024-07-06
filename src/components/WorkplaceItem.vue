@@ -13,7 +13,16 @@
           Примерный график: {{ workplace.schedule }}
         </div>
       </div>
+      <VaButton v-if="!disableButton" @click.stop="deleteWorplace"
+        >Удалить</VaButton
+      >
     </VaCardContent>
+    <WorkplaceModal
+      :show="showModal"
+      :isEdit="isEdit"
+      @close="showModal = false"
+      @ok="showModal = false"
+    />
     <VaButtonGroup v-if="!workplace.status" class="button-group">
       <VaButton @click="acceptRequest(workplace.workPlaceId)">
         Принять
@@ -29,13 +38,19 @@ import { onBeforeMount, ref, watch } from "vue";
 import { IOffice, IWorkPlace } from "./models/office.model";
 import { Office } from "./services/office.service";
 import { IWorker } from "./models/worker.model";
+import WorkplaceModal from "../components/modals/WorkplaceModal.vue";
 const officeService = new Office();
 const props = defineProps<{
   workplace: IWorkPlace;
   showDetails: boolean;
+  disableButton?: boolean;
 }>();
 const worker = ref<IWorker>();
 const emit = defineEmits(["status-updated"]);
+
+function deleteWorplace() {
+  // officeService.deleteWorkplace(props.workplace.workPlaceId);
+}
 
 async function acceptRequest(wokrplaceId: number) {
   await officeService.acceptRequest(wokrplaceId);

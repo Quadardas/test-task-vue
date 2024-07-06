@@ -3,4 +3,5 @@ export interface IWorker {
   name: string;
   workerRole: string;
   birthday: Date;
+  accessCode: string;
 }

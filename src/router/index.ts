@@ -4,6 +4,7 @@ import OfficeItem from "@/components/OfficeItem.vue";
 import OfficeView from "@/views/OfficeView.vue";
 import WorkplaceView from "@/views/WorkplaceView.vue";
 import AdminView from "@/views/AdminView.vue";
+import Login from "@/views/Login.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -19,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin",
     name: "admin",
     component: AdminView,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
   },
 ];
 

@@ -16,6 +16,7 @@
         <VaSelect
           v-model="worker.workerRole"
           :options="userRoles"
+          :value-by="(option) => option.value"
           :rules="[(v) => v || 'Обязательное поле']"
           label="Роль сотрудника"
         />
@@ -130,7 +131,7 @@ const okButtonClick = async () => {
     workplace.value.workPlaceId = newWorkplaceId.value;
     workplace.value.workerId = newWorkerId.value;
     office.createNewWorkplace(worker.value, workplace.value, +route.params.id);
-    // await console.log(workplace.value, worker.value);
+    await console.log(workplace.value, worker.value);
   }
 };
 

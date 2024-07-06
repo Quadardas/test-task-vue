@@ -250,9 +250,23 @@ export class Office {
         localStorage.setItem("workplaces", JSON.stringify(workplacesData));
         localStorage.setItem("workers", JSON.stringify(workersData));
 
-        resolve("Data successfully updated!");
+        resolve("Data updated");
       } catch (error) {
-        reject("Error updating data: " + error);
+        reject("Error : " + error);
+      }
+    });
+
+    return promise;
+  }
+  async createNewWorker(worker: IWorker) {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        const workersData = JSON.parse(localStorage.getItem("workers") || "[]");
+        workersData.push(worker);
+        localStorage.setItem("workers", JSON.stringify(workersData));
+        resolve("Data updated");
+      } catch (error) {
+        reject("Error : " + error);
       }
     });
 
