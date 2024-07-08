@@ -9,7 +9,13 @@
         :mask="{ blocks: [6] }"
         placeholder="######"
       />
-      <VaButton class="loginBTN" @click="login"> Войти </VaButton>
+      <VaButton
+        :disabled="!userLogin.loginCode"
+        class="loginBTN"
+        @click="login"
+      >
+        Войти
+      </VaButton>
     </form>
   </div>
 </template>
@@ -17,12 +23,22 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Auth } from "../components/services/auth.service";
+import { useToast } from "vuestic-ui";
+const { init } = useToast();
 
 const userLogin = reactive({
   loginCode: "",
 });
 async function login() {
-  await Auth.login(+userLogin.loginCode);
+  try {
+    await Auth.login(+userLogin.loginCode);
+    router.push("/");
+  } catch {
+    init({
+      message: "Неверный код доступа",
+      color: "danger",
+    });
+  }
 }
 const router = useRouter();
 </script>

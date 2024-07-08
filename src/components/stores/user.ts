@@ -15,6 +15,6 @@ export const useUserStore = defineStore("user", () => {
   }
   const userName = computed(() => `${user.value?.name} `);
   const isAdmin = computed(() => user.value?.workerRole === EWorkerRoles.admin);
-  // const isLogin = computed(() => user.value.workerId);
-  return { user, setUser, userName, logOut, isAdmin };
+  const isLogin = computed(() => user.value?.workerId);
+  return { user, setUser, userName, logOut, isAdmin, isLogin };
 });

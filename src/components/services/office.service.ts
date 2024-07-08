@@ -47,10 +47,8 @@ export class Office {
       if (!office) {
         reject(new Error(`Office with id ${officeId} not found`));
       }
-      const workplaces = workplacesData.filter(
-        (workplace: IWorkPlace) =>
-          office.workplacesId.includes(workplace.workPlaceId) &&
-          workplace.status === true
+      const workplaces = workplacesData.filter((workplace: IWorkPlace) =>
+        office.workplacesId.includes(workplace.workPlaceId)
       );
       resolve(workplaces);
     });
@@ -83,10 +81,7 @@ export class Office {
       const workplacesData = JSON.parse(
         localStorage.getItem("workplaces") || "[]"
       );
-      const workplaces = workplacesData.filter(
-        (workplace: IWorkPlace) => workplace.status === true
-      );
-      resolve(workplaces);
+      resolve(workplacesData);
       reject(new Error(`Workplaces not found`));
     });
 
@@ -112,7 +107,7 @@ export class Office {
 
     return data;
   }
-
+  // поменять на перенос из нового ls в старый
   public async acceptRequest(workplaceId: number): Promise<IWorkPlace> {
     const promise = new Promise<IWorkPlace>((resolve, reject) => {
       const workplacesData = JSON.parse(
@@ -177,7 +172,7 @@ export class Office {
         return;
       }
       const worker = workersData.find(
-        (worker: any) => worker.workerId === workplace.workerId
+        (worker: any) => worker?.workerId === workplace?.workerId
       );
       resolve(worker);
     });
@@ -210,7 +205,7 @@ export class Office {
       const workers = JSON.parse(localStorage.getItem("workers") || "[]");
       if (workers.length > 0) {
         const lastWorkerId = Math.max(
-          ...workers.map((worker: any) => worker.workerId)
+          ...workers.map((worker: any) => worker?.workerId)
         );
         resolve(lastWorkerId + 1);
       } else {
@@ -248,7 +243,9 @@ export class Office {
         }
         localStorage.setItem("office", JSON.stringify(officeData));
         localStorage.setItem("workplaces", JSON.stringify(workplacesData));
-        localStorage.setItem("workers", JSON.stringify(workersData));
+        if (worker) {
+          localStorage.setItem("workers", JSON.stringify(workersData));
+        }
 
         resolve("Data updated");
       } catch (error) {
@@ -258,6 +255,25 @@ export class Office {
 
     return promise;
   }
+  async deleteWorkplace(workplaceId: number): Promise<IWorkPlace> {
+    const promise = new Promise<IWorkPlace>((resolve, reject) => {
+      const workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
+
+      const index = workplaces.findIndex(
+        (workplace: IWorkPlace) => workplace.workPlaceId === workplaceId
+      );
+
+      if (index !== -1) {
+        const [deletedWorkplace] = workplaces.splice(index, 1);
+        localStorage.setItem("workplaces", JSON.stringify(workplaces));
+        resolve(deletedWorkplace);
+      } else {
+        reject(new Error("Workplace not found"));
+      }
+    });
+    return promise;
+  }
+
   async createNewWorker(worker: IWorker) {
     const promise = new Promise((resolve, reject) => {
       try {
@@ -272,14 +288,99 @@ export class Office {
 
     return promise;
   }
-
-  async getAllWorkers(): Promise<IWorker> {
-    const promise = new Promise<IWorker>((resolve, reject) => {
+  async getAllWorkers(): Promise<IWorker[]> {
+    const promise = new Promise<IWorker[]>((resolve, reject) => {
       const workers = JSON.parse(localStorage.getItem("workers") || "[]");
       resolve(workers);
       reject("No workers");
     });
     const data = await promise;
     return data;
+  }
+
+  async editWorker(workerEdit: IWorker): Promise<IWorker> {
+    const promise = new Promise<IWorker>((resolve, reject) => {
+      const workers = JSON.parse(localStorage.getItem("workers") || "[]");
+
+      const index = workers.findIndex(
+        (worker: IWorker) => worker.workerId === workerEdit.workerId
+      );
+
+      if (index !== -1) {
+        workers[index] = workerEdit;
+        localStorage.setItem("workers", JSON.stringify(workers));
+        resolve(workerEdit);
+      } else {
+        reject(new Error("Worker not found"));
+      }
+    });
+
+    try {
+      const updatedWorker = await promise;
+      return updatedWorker;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  async deleteWorker(workerId: number): Promise<IWorker> {
+    const promise = new Promise<IWorker>((resolve, reject) => {
+      const workers = JSON.parse(localStorage.getItem("workers") || "[]");
+      const workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
+
+      const workerIndex = workers.findIndex(
+        (worker: IWorker) => worker.workerId === workerId
+      );
+      if (workerIndex !== -1) {
+        const [deletedWorker] = workers.splice(workerIndex, 1);
+        localStorage.setItem("workers", JSON.stringify(workers));
+        const workplaceIndex = workplaces.findIndex(
+          (workplace: IWorkPlace) => workplace.workerId === workerId
+        );
+        if (workplaceIndex !== -1) {
+          workplaces[workplaceIndex].workerId = null;
+          localStorage.setItem("workplaces", JSON.stringify(workplaces));
+        }
+        resolve(deletedWorker);
+      } else {
+        reject(new Error("Worker not found"));
+      }
+    });
+
+    try {
+      const deletedWorker = await promise;
+      return deletedWorker;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async getWorkersForSelect(): Promise<{ id: number; text: string }[]> {
+    const promise = new Promise<{ id: number; text: string }[]>(
+      (resolve, reject) => {
+        const workers = JSON.parse(localStorage.getItem("workers") || "[]");
+
+        if (workers.length > 0) {
+          const workerList = workers.map(
+            (worker: { workerId: number; name: string }) => ({
+              id: worker?.workerId,
+              text: worker?.name,
+            })
+          );
+          resolve(workerList);
+        } else {
+          reject("No workers");
+        }
+      }
+    );
+
+    try {
+      const data = await promise;
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }

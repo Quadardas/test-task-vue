@@ -25,12 +25,12 @@ const officeService = new Office();
 //   {
 //     officeId: 1,
 //     workplacesId: [1, 2, 5],
-//     maxWorkplaces: 3,
+//     maxWorkplaces: 6,
 //   },
 //   {
 //     officeId: 2,
 //     workplacesId: [3, 4],
-//     maxWorkplaces: 2,
+//     maxWorkplaces: 3,
 //   },
 // ];
 // const aboba1 = [
@@ -80,35 +80,35 @@ const officeService = new Office();
 //   {
 //     workerId: 1,
 //     name: "Александр",
-//     workerRole: "aboba",
+//     workerRole: "admin",
 //     birthday: new Date(),
-//     accessCode: "MTIzNDU2",
+//     accessCode: 123456,
 //   },
 //   {
 //     workerId: 2,
 //     name: "ВИКТОР",
-//     workerRole: "aboba",
+//     workerRole: "worker",
 //     birthday: new Date(),
 //     accessCode: 234567,
 //   },
 //   {
 //     workerId: 3,
 //     name: "НИКИТА",
-//     workerRole: "aboba",
+//     workerRole: "worker",
 //     birthday: new Date(),
 //     accessCode: 345678,
 //   },
 //   {
 //     workerId: 4,
 //     name: "АБОБА",
-//     workerRole: "aboba",
+//     workerRole: "worker",
 //     birthday: new Date(),
 //     accessCode: 456789,
 //   },
 //   {
 //     workerId: 5,
 //     name: "ЖИЖА",
-//     workerRole: "aboba",
+//     workerRole: "worker",
 //     birthday: new Date(),
 //     accessCode: 567890,
 //   },
@@ -117,7 +117,7 @@ const officeService = new Office();
 // onBeforeMount(() => {
 //   localStorage.setItem("office", JSON.stringify(aboba));
 //   localStorage.setItem("workplaces", JSON.stringify(aboba1));
-// localStorage.setItem("workers", JSON.stringify(aboba2));
+//   localStorage.setItem("workers", JSON.stringify(aboba2));
 // });
 </script>
 

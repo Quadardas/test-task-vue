@@ -8,9 +8,8 @@ export interface IOffice {
 
 export interface IWorkPlace {
   workPlaceId: number;
-  workerId: number;
-  equipment: string | null;
+  workerId?: number;
+  equipment?: string;
   officeWork: boolean;
-  schedule: string | null;
-  status: boolean;
+  schedule?: string;
 }

@@ -1,7 +1,7 @@
 <template>
   <Modal :show="showModal" @ok="okButtonClick">
     <template #header>
-      <h3>{{ !isEdit ? "Заявка на рабочее место" : "Редактирование" }}</h3>
+      <h3>{{ isEdit ? "Редактирование" : "Заявка на рабочее место" }}</h3>
     </template>
 
     <template #body>
@@ -14,13 +14,14 @@
           label="ФИО сотрудника"
         />
         <VaSelect
+          v-if="!isEdit"
           v-model="worker.workerRole"
           :options="userRoles"
           :value-by="(option) => option.value"
           :rules="[(v) => v || 'Обязательное поле']"
           label="Роль сотрудника"
+          disabled
         />
-
         <VaDateInput
           v-model="worker.birthday"
           :rules="[(v) => validateBirthday(v)]"
@@ -35,13 +36,6 @@
           ]"
           label="Оборудование"
         />
-        <!-- <VaSelect
-          v-model="workplace.officeWork"
-          :options="userRoles"
-          :rules="[(v) => v || 'Field is required']"
-          label="Роль сотрудника"
-        /> -->
-
         <VaInput
           v-model="workplace.schedule"
           :rules="[
@@ -67,6 +61,7 @@ import { IWorkPlace } from "../models/office.model";
 import { Office } from "../services/office.service";
 import { useRoute } from "vue-router";
 import { useForm } from "vuestic-ui";
+import { useUserStore } from "../stores/user";
 
 const office = new Office();
 const { reset } = useForm("formRef");
@@ -74,17 +69,33 @@ const newWorkerId = ref<number>(0);
 const newWorkplaceId = ref<number>(0);
 const route = useRoute();
 const showModal = ref(false);
-const worker = ref<IWorker>();
+const store = useUserStore();
 const workplace = ref<IWorkPlace>();
 const workplaceEdit = ref<IWorkPlace>();
 const workerEdit = ref<IWorker>();
-
 const props = defineProps<{
   isEdit: boolean;
+  isApply: boolean;
   selectedWorkplace: IWorkPlace;
+  workerEdit: IWorker;
 }>();
+const worker = ref<IWorker>({
+  workerId: props.workerEdit?.workerId || store.user.workerId,
+  name: props.workerEdit?.name || store.user?.name,
+  workerRole: props.workerEdit?.workerRole || store.user?.workerRole,
+  birthday: props.workerEdit?.birthday || store.user?.birthday,
+  accessCode: props.workerEdit?.accessCode || store.user?.accessCode,
+});
+workplace.value = {
+  workPlaceId: props.selectedWorkplace?.workPlaceId,
+  workerId: worker.value.workerId,
+  equipment: props.selectedWorkplace?.equipment,
+  officeWork: props.selectedWorkplace?.officeWork,
+  schedule: props.selectedWorkplace?.schedule,
+};
 
 const { validate } = useForm("formRef");
+const workerList = ref();
 const userRoles = [
   { value: "admin", text: "Администратор" },
   { value: "worker", text: "Работник" },
@@ -107,21 +118,22 @@ const emits = defineEmits<{
   (e: "ok"): void;
 }>();
 
-worker.value = {
-  workerId: NaN,
-  name: "",
-  workerRole: "",
-  birthday: new Date(),
-};
+// worker.value = {
+//   workerId: workerList.value.id || newWorkerId.value,
+//   name: workerList.value.name || "",
+//   workerRole: props.workerEdit.workerRole || "",
+//   birthday: new Date(),
+//   accessCode: props.workerEdit.accessCode,
+// };
 
-workplace.value = {
-  workPlaceId: NaN,
-  workerId: 0,
-  equipment: "",
-  officeWork: true,
-  schedule: "",
-  status: false,
-};
+// workplace.value = {
+//   workPlaceId: props.selectedWorkplace.workPlaceId || newWorkplaceId.value,
+//   workerId: workerList.value.id || newWorkerId.value,
+//   equipment: props.selectedWorkplace.equipment || "",
+//   officeWork: props.selectedWorkplace.officeWork || false,
+//   schedule: props.selectedWorkplace.schedule || "",
+//   status: props.selectedWorkplace.status || false,
+// };
 
 const okButtonClick = async () => {
   showModal.value = false;
@@ -131,7 +143,7 @@ const okButtonClick = async () => {
     workplace.value.workPlaceId = newWorkplaceId.value;
     workplace.value.workerId = newWorkerId.value;
     office.createNewWorkplace(worker.value, workplace.value, +route.params.id);
-    await console.log(workplace.value, worker.value);
+    // await console.log(workplace.value, worker.value);
   }
 };
 
@@ -149,7 +161,6 @@ function clearForm() {
     equipment: "",
     officeWork: true,
     schedule: "",
-    status: false,
   };
 }
 const handleSaveClick = async () => {
@@ -160,27 +171,8 @@ const handleSaveClick = async () => {
   }
 };
 onBeforeMount(async () => {
-  // if (props.selectedWorkplace) {
-  //   workplaceEdit.value = await office.getOneWorkplace(
-  //     props.selectedWorkplace.workPlaceId
-  //   );
-  //   workerEdit.value = await office.getWorker(props.selectedWorkplace.workerId);
-  //   worker.value = {
-  //     workerId: workerEdit.value?.workerId,
-  //     name: workerEdit.value?.name,
-  //     workerRole: workerEdit.value?.workerRole,
-  //     birthday: workerEdit.value?.birthday,
-  //   };
+  workerList.value = await office.getWorkersForSelect();
 
-  //   workplace.value = {
-  //     workPlaceId: workplaceEdit.value?.workPlaceId,
-  //     workerId: workplaceEdit.value?.workerId,
-  //     equipment: workplaceEdit.value?.equipment,
-  //     officeWork: workplaceEdit.value?.officeWork,
-  //     schedule: workplaceEdit.value?.schedule,
-  //     status: workplaceEdit.value?.status,
-  //   };
-  // }
   newWorkerId.value = await office.getNewWorkerId();
   newWorkplaceId.value = await office.getNewWorkplaceId();
 });

@@ -4,8 +4,17 @@
       >ID рабочего места: {{ workplace.workPlaceId }}</VaCardTitle
     >
     <VaCardContent class="workplace-content"
-      ><div class="workplace--worker">Имя работника: {{ worker?.name }}</div>
+      ><div class="workplace--worker">
+        {{
+          workplace?.workerId !== null
+            ? `Имя работника: ${worker?.name}`
+            : "Свободно"
+        }}
+      </div>
       <div v-if="showDetails">
+        <div class="worker--role" v-if="workplace?.workerId !== null">
+          Роль сотрудника: {{ worker?.workerRole }}
+        </div>
         <div class="workplace--equipment">
           Оборудование: {{ workplace.equipment }}
         </div>
@@ -13,17 +22,25 @@
           Примерный график: {{ workplace.schedule }}
         </div>
       </div>
-      <VaButton v-if="!disableButton" @click.stop="deleteWorplace"
+      <VaButton
+        v-if="!workplace?.workerId && $route.params.id && !store.isAdmin"
+        @click.stop="applyWorkplace"
+        >Подать заявку</VaButton
+      >
+      <VaButton
+        v-if="!disableButton && !approvable"
+        @click.stop="deleteWorplace"
         >Удалить</VaButton
       >
     </VaCardContent>
     <WorkplaceModal
       :show="showModal"
-      :isEdit="isEdit"
+      :workplace-edit="workplace"
+      :selected-workplace="workplace"
       @close="showModal = false"
       @ok="showModal = false"
     />
-    <VaButtonGroup v-if="!workplace.status" class="button-group">
+    <VaButtonGroup v-if="approvable" class="button-group">
       <VaButton @click="acceptRequest(workplace.workPlaceId)">
         Принять
       </VaButton>
@@ -39,17 +56,23 @@ import { IOffice, IWorkPlace } from "./models/office.model";
 import { Office } from "./services/office.service";
 import { IWorker } from "./models/worker.model";
 import WorkplaceModal from "../components/modals/WorkplaceModal.vue";
+import { useUserStore } from "./stores/user";
+const worker = ref<IWorker>();
 const officeService = new Office();
 const props = defineProps<{
   workplace: IWorkPlace;
   showDetails: boolean;
   disableButton?: boolean;
+  approvable?: boolean;
 }>();
-const worker = ref<IWorker>();
+const showModal = ref(false);
+const store = useUserStore();
+const isApply = ref(false);
+
 const emit = defineEmits(["status-updated"]);
 
 function deleteWorplace() {
-  // officeService.deleteWorkplace(props.workplace.workPlaceId);
+  officeService.deleteWorkplace(props.workplace.workPlaceId);
 }
 
 async function acceptRequest(wokrplaceId: number) {
@@ -58,8 +81,13 @@ async function acceptRequest(wokrplaceId: number) {
 }
 async function declineRequest(wokrplaceId: number) {
   await officeService.declineRequest(wokrplaceId);
-  emit("status-updated");
+  emit("-updated");
 }
+const applyWorkplace = (work: IWorkPlace) => {
+  isApply.value = true;
+  showModal.value = true;
+  // console.log(selectedWorkplace.value);
+};
 
 onBeforeMount(async () => {
   // console.log(props.workplace, "aboba");

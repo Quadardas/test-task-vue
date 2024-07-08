@@ -89,7 +89,7 @@ worker.value = {
 
 const okButtonClick = async () => {
   if (props.workerEdit) {
-    // await office.editWorker(worker.value); обновить LS
+    await office.editWorker(worker.value);
   } else {
     worker.value.workerId = await office.getNewWorkerId();
     await office.createNewWorker(worker.value);

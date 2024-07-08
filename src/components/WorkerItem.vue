@@ -2,7 +2,7 @@
   <VaCard class="worker" @click="showModalWorker = true">
     <VaCardTitle class="worker-name">{{ props.worker.name }}</VaCardTitle>
     <VaCardContent class="worker-content"
-      ><div class="worker-id">ID работника: {{ props.worker.workerId }}</div>
+      ><div class="worker-id">ID работника: {{ props.worker?.workerId }}</div>
       <div class="worker-role">Роль: {{ props.worker.workerRole }}</div>
       <div class="worker-birthday">
         День рождения: {{ props.worker.birthday }}
@@ -24,7 +24,7 @@ import { ref } from "vue";
 import { Office } from "../components/services/office.service";
 const officeService = new Office();
 function deleteWorker() {
-  // officeService.deleteWorker(props.worker.workerId);
+  officeService.deleteWorker(props.worker?.workerId);
 }
 const showModalWorker = ref(false);
 const props = defineProps<{

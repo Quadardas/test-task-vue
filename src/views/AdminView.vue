@@ -30,19 +30,18 @@
         v-for="workplace in requestWorkplaces"
         :key="workplace.workPlaceId"
         :workplace="workplace"
+        approvable
         :showDetails="true"
         @status-updated="updateWorkplaces"
       />
-      <WorkplaceModal
-        :show="showModal"
-        :isEdit="isEdit"
-        :component-props="{
-          workplace: selectedWorkplace,
-        }"
-        @close="showModal = false"
-        @ok="showModal = false"
-      />
     </div>
+    <WorkplaceModal
+      :show="showModal"
+      :isEdit="isEdit"
+      :workplace="selectedWorkplace"
+      @close="showModal = false"
+      @ok="showModal = false"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -53,6 +52,7 @@ import WorkerItem from "../components/WorkerItem.vue";
 import WorkplaceItem from "../components/WorkplaceItem.vue";
 import { IWorkPlace } from "@/components/models/office.model";
 import WorkplaceModal from "@/components/modals/WorkplaceModal.vue";
+import WorkplaceEditModal from "@/components/modals/WorkplaceEditModal.vue";
 import WorkerCreate from "../components/modals/WorkerCreate.vue";
 import { useUserStore } from "../components/stores/user";
 const office = new Office();
@@ -82,7 +82,6 @@ onBeforeMount(async () => {
   workers.value = await office.getAllWorkers();
   workplaces.value = await office.getAllWorkPlaces();
   requestWorkplaces.value = await office.getRequestWorkplace();
-  console.log(store);
 
   // console.log(requestWorkplaces.value, "Заявки");
 });

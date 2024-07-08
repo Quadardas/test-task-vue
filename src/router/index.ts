@@ -5,6 +5,8 @@ import OfficeView from "@/views/OfficeView.vue";
 import WorkplaceView from "@/views/WorkplaceView.vue";
 import AdminView from "@/views/AdminView.vue";
 import Login from "@/views/Login.vue";
+import { useUserStore } from "@/components/stores/user";
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -31,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to) => {
+  const store = useUserStore();
+  if (!store.isLogin && !to.path.includes("login")) router.push("/login");
 });
 
 export default router;

@@ -6,12 +6,12 @@
       disable-button
       :showDetails="!!route.params.id"
       :workplace="work"
-      @click="editWorkplace(work)"
     />
     <VaButton
       v-if="
         props.office.officeId === +route.params.id &&
-        workplaces.length != office.maxWorkplaces
+        workplaces.length != office.maxWorkplaces &&
+        store.isAdmin
       "
       class="new-workplace"
       @click="newWorkplace"
@@ -22,9 +22,8 @@
     <WorkplaceModal
       :show="showModal"
       :isEdit="isEdit"
-      :component-props="{
-        workplace: selectedWorkplace,
-      }"
+      :isApply="isApply"
+      :selected-workplace="selectedWorkplace"
       @close="showModal = false"
       @ok="showModal = false"
     />
@@ -37,12 +36,15 @@ import { onBeforeMount, ref } from "vue";
 import { IOffice, IWorkPlace } from "./models/office.model";
 import router from "@/router";
 import WorkplaceModal from "@/components/modals/WorkplaceModal.vue";
-
+import { useUserStore } from "./stores/user";
 import { useRoute } from "vue-router";
+import { Office } from "./services/office.service";
 
 const showModal = ref(false);
 const isEdit = ref(false);
+const officeService = new Office();
 const selectedWorkplace = ref();
+const store = useUserStore();
 
 const route = useRoute();
 const props = defineProps<{
@@ -50,15 +52,18 @@ const props = defineProps<{
   office: IOffice;
 }>();
 
-const newWorkplace = () => {
-  isEdit.value = false;
-  showModal.value = true;
-};
-const editWorkplace = (work: IWorkPlace) => {
-  // selectedWorkplace.value = work;
-  // isEdit.value = true;
-  // showModal.value = true;
-  // console.log(selectedWorkplace.value);
+const newWorkplace = async () => {
+  officeService.createNewWorkplace(
+    null,
+    {
+      workPlaceId: await officeService.getNewWorkplaceId(),
+      workerId: null,
+      equipment: null,
+      officeWork: null,
+      schedule: null,
+    },
+    props.office.officeId
+  );
 };
 </script>
 
