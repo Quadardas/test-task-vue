@@ -37,6 +37,7 @@
       :show="showModal"
       :workplace-edit="workplace"
       :selected-workplace="workplace"
+      :isApply
       @close="showModal = false"
       @ok="showModal = false"
     />
@@ -73,19 +74,21 @@ const emit = defineEmits(["status-updated"]);
 
 function deleteWorplace() {
   officeService.deleteWorkplace(props.workplace.workPlaceId);
+  emit("status-updated");
 }
 
 async function acceptRequest(wokrplaceId: number) {
-  await officeService.acceptRequest(wokrplaceId);
+  await officeService.acceptRequest(wokrplaceId, worker.value?.workerId);
   emit("status-updated");
 }
 async function declineRequest(wokrplaceId: number) {
   await officeService.declineRequest(wokrplaceId);
-  emit("-updated");
+  emit("status-updated");
 }
 const applyWorkplace = (work: IWorkPlace) => {
   isApply.value = true;
   showModal.value = true;
+
   // console.log(selectedWorkplace.value);
 };
 
@@ -93,7 +96,11 @@ onBeforeMount(async () => {
   // console.log(props.workplace, "aboba");
 
   try {
-    worker.value = await officeService.getWorker(props.workplace.workPlaceId);
+    worker.value = await officeService.getWorker(
+      props.workplace.workPlaceId,
+      props.workplace.workerId,
+      props.approvable
+    );
   } catch (error) {
     console.error(error);
   }

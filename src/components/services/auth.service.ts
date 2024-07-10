@@ -10,7 +10,7 @@ export class Auth {
     const authResult = await new Promise<AuthResult>((resolve, reject) => {
       const storedUsers = JSON.parse(localStorage.getItem("workers") || "[]");
       const user = storedUsers.find(
-        (u: IWorker) => u.accessCode == code.toString()
+        (u: IWorker) => u.accessCode == code.toString() && !u.isNew
       );
       if (user) {
         resolve({ key: user.workerId });

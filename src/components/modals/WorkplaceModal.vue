@@ -28,6 +28,7 @@
           label="День рождения"
           manual-input
           clearable
+          disabled
         />
         <VaInput
           v-model="workplace.equipment"
@@ -62,6 +63,7 @@ import { Office } from "../services/office.service";
 import { useRoute } from "vue-router";
 import { useForm } from "vuestic-ui";
 import { useUserStore } from "../stores/user";
+import router from "@/router";
 
 const office = new Office();
 const { reset } = useForm("formRef");
@@ -71,8 +73,8 @@ const route = useRoute();
 const showModal = ref(false);
 const store = useUserStore();
 const workplace = ref<IWorkPlace>();
-const workplaceEdit = ref<IWorkPlace>();
-const workerEdit = ref<IWorker>();
+// const workplaceEdit = ref<IWorkPlace>();
+// const workerEdit = ref<IWorker>();
 const props = defineProps<{
   isEdit: boolean;
   isApply: boolean;
@@ -86,13 +88,13 @@ const worker = ref<IWorker>({
   birthday: props.workerEdit?.birthday || store.user?.birthday,
   accessCode: props.workerEdit?.accessCode || store.user?.accessCode,
 });
-workplace.value = {
-  workPlaceId: props.selectedWorkplace?.workPlaceId,
-  workerId: worker.value.workerId,
-  equipment: props.selectedWorkplace?.equipment,
-  officeWork: props.selectedWorkplace?.officeWork,
-  schedule: props.selectedWorkplace?.schedule,
-};
+// workplace.value = {
+//   workPlaceId: props.selectedWorkplace?.workPlaceId,
+//   workerId: worker.value.workerId,
+//   equipment: props.selectedWorkplace?.equipment,
+//   officeWork: props.selectedWorkplace?.officeWork,
+//   schedule: props.selectedWorkplace?.schedule,
+// };
 
 const { validate } = useForm("formRef");
 const workerList = ref();
@@ -138,11 +140,14 @@ const emits = defineEmits<{
 const okButtonClick = async () => {
   showModal.value = false;
 
-  if (worker.value && workplace.value) {
+  if (props.isApply) {
+    office.createRequest(worker.value, workplace.value, +route.params.id);
+  } else if (worker.value && workplace.value) {
     worker.value.workerId = newWorkerId.value;
     workplace.value.workPlaceId = newWorkplaceId.value;
     workplace.value.workerId = newWorkerId.value;
     office.createNewWorkplace(worker.value, workplace.value, +route.params.id);
+
     // await console.log(workplace.value, worker.value);
   }
 };
@@ -171,8 +176,15 @@ const handleSaveClick = async () => {
   }
 };
 onBeforeMount(async () => {
-  workerList.value = await office.getWorkersForSelect();
+  workplace.value = {
+    workPlaceId: props.selectedWorkplace?.workPlaceId,
+    workerId: worker.value.workerId,
+    equipment: props.selectedWorkplace?.equipment,
+    officeWork: props.selectedWorkplace?.officeWork,
+    schedule: props.selectedWorkplace?.schedule,
+  };
 
+  workerList.value = await office.getWorkersForSelect();
   newWorkerId.value = await office.getNewWorkerId();
   newWorkplaceId.value = await office.getNewWorkplaceId();
 });

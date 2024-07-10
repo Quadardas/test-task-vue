@@ -7,7 +7,16 @@
       <div class="worker-birthday">
         День рождения: {{ props.worker.birthday }}
       </div>
-      <VaButton @click.stop="deleteWorker">Удалить</VaButton></VaCardContent
+
+      <VaButtonGroup v-if="props.worker.isNew" class="button-group">
+        <VaButton @click.stop="acceptWorker"> Принять </VaButton>
+        <VaButton @click.stop="deleteWorker" color="danger">
+          Отклонить
+        </VaButton>
+      </VaButtonGroup>
+      <VaButton v-else @click.stop="deleteWorker"
+        >Удалить</VaButton
+      ></VaCardContent
     >
   </VaCard>
   <WorkerCreate
@@ -22,14 +31,23 @@ import { IWorker } from "@/components/models/worker.model";
 import WorkerCreate from "../components/modals/WorkerCreate.vue";
 import { ref } from "vue";
 import { Office } from "../components/services/office.service";
+
 const officeService = new Office();
-function deleteWorker() {
-  officeService.deleteWorker(props.worker?.workerId);
-}
-const showModalWorker = ref(false);
 const props = defineProps<{
   worker: IWorker;
 }>();
+const emit = defineEmits(["status-updated"]);
+
+function acceptWorker() {
+  officeService.acceptWorker(props.worker?.workerId);
+  emit("status-updated");
+}
+
+function deleteWorker() {
+  officeService.deleteWorker(props.worker?.workerId);
+  emit("status-updated");
+}
+const showModalWorker = ref(false);
 </script>
 <style lang="scss" scoped>
 .worker {

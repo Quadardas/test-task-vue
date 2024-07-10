@@ -1,7 +1,11 @@
 <template>
   <div class="container--office">
     <div v-if="office" class="office--id">{{ office.officeId }}</div>
-    <CabinetItem :workplaces="workplaces" :office="office" />
+    <CabinetItem
+      :workplaces="workplaces"
+      :office="office"
+      @status-updated="updateWorkplaces"
+    />
   </div>
 </template>
 
@@ -17,6 +21,11 @@ const officeService = new Office();
 const props = defineProps<{
   office: IOffice;
 }>();
+const updateWorkplaces = async () => {
+  workplaces.value = await officeService.getWorkPlacesInOffice(
+    props.office?.officeId
+  );
+};
 
 onBeforeMount(async () => {
   if (props.office) {

@@ -4,4 +4,5 @@ export interface IWorker {
   workerRole: string;
   birthday: Date;
   accessCode: string;
+  isNew?: boolean;
 }

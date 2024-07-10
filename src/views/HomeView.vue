@@ -14,6 +14,7 @@ import OfficeItem from "@/components/OfficeItem.vue";
 import { Office } from "@/components/services/office.service";
 import router from "@/router";
 import { onBeforeMount, ref } from "vue";
+import { format, compareAsc } from "date-fns";
 
 const openOffice = (id: number) => {
   router.push(`/office/${id}`);
@@ -24,7 +25,7 @@ const officeService = new Office();
 // const aboba = [
 //   {
 //     officeId: 1,
-//     workplacesId: [1, 2, 5],
+//     workplacesId: [1, 2, 5, 6],
 //     maxWorkplaces: 6,
 //   },
 //   {
@@ -74,6 +75,14 @@ const officeService = new Office();
 //     schedule: "никогда",
 //     status: false,
 //   },
+//   {
+//     workPlaceId: 6,
+//     workerId: null,
+//     equipment: "4 КАМПУКТЕРА",
+//     officeWork: true,
+//     schedule: "никогда",
+//     status: false,
+//   },
 // ];
 
 // const aboba2 = [
@@ -81,35 +90,35 @@ const officeService = new Office();
 //     workerId: 1,
 //     name: "Александр",
 //     workerRole: "admin",
-//     birthday: new Date(),
+//     birthday: new Date(1995, 6, 2),
 //     accessCode: 123456,
 //   },
 //   {
 //     workerId: 2,
 //     name: "ВИКТОР",
 //     workerRole: "worker",
-//     birthday: new Date(),
+//     birthday: new Date(1987, 1, 11),
 //     accessCode: 234567,
 //   },
 //   {
 //     workerId: 3,
 //     name: "НИКИТА",
 //     workerRole: "worker",
-//     birthday: new Date(),
+//     birthday: new Date(1989, 6, 10),
 //     accessCode: 345678,
 //   },
 //   {
 //     workerId: 4,
 //     name: "АБОБА",
 //     workerRole: "worker",
-//     birthday: new Date(),
+//     birthday: new Date(1986, 4, 22),
 //     accessCode: 456789,
 //   },
 //   {
 //     workerId: 5,
 //     name: "ЖИЖА",
 //     workerRole: "worker",
-//     birthday: new Date(),
+//     birthday: new Date(1999, 1, 23),
 //     accessCode: 567890,
 //   },
 // ];

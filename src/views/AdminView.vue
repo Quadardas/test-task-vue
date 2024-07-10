@@ -6,6 +6,7 @@
         v-for="worker in workers"
         :key="worker.workerId"
         :worker="worker"
+        @status-updated="updateWorkers"
       />
       <VaButton @click="addWorker">Добавить</VaButton>
       <WorkerCreate
@@ -22,6 +23,7 @@
         :workplace="work"
         :showDetails="true"
         @click="editWorkplace(work)"
+        @status-updated="updateWorkplaces"
       />
     </div>
     <div class="request-list">
@@ -74,7 +76,9 @@ const updateWorkplaces = async () => {
   workplaces.value = await office.getAllWorkPlaces();
   requestWorkplaces.value = await office.getRequestWorkplace();
 };
-
+const updateWorkers = async () => {
+  workers.value = await office.getAllWorkers();
+};
 function addWorker() {
   showModalWorker.value = true;
 }

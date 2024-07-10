@@ -16,6 +16,15 @@
       >
         Войти
       </VaButton>
+      <VaButton @click="noAccessCode" preset="secondary" class="mr-6 mb-2">
+        У меня нет кода доступа
+      </VaButton>
+      <WorkerCreate
+        :show="showModalWorker"
+        @close="showModalWorker = false"
+        @ok="showModalWorker = false"
+        isNewWorker
+      />
     </form>
   </div>
 </template>
@@ -24,11 +33,19 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Auth } from "../components/services/auth.service";
 import { useToast } from "vuestic-ui";
+import WorkerCreate from "../components/modals/WorkerCreate.vue";
 const { init } = useToast();
-
+const showModalWorker = ref<boolean>(false);
+const isNewWorker = ref<boolean>(false);
 const userLogin = reactive({
   loginCode: "",
 });
+
+function noAccessCode() {
+  showModalWorker.value = true;
+  isNewWorker.value = true;
+}
+
 async function login() {
   try {
     await Auth.login(+userLogin.loginCode);

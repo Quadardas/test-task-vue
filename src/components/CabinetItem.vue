@@ -22,7 +22,6 @@
     <WorkplaceModal
       :show="showModal"
       :isEdit="isEdit"
-      :isApply="isApply"
       :selected-workplace="selectedWorkplace"
       @close="showModal = false"
       @ok="showModal = false"
@@ -52,6 +51,7 @@ const props = defineProps<{
   office: IOffice;
 }>();
 
+const emit = defineEmits(["status-updated"]);
 const newWorkplace = async () => {
   officeService.createNewWorkplace(
     null,
@@ -64,6 +64,7 @@ const newWorkplace = async () => {
     },
     props.office.officeId
   );
+  emit("status-updated");
 };
 </script>
 
@@ -71,6 +72,7 @@ const newWorkplace = async () => {
 .cabinet-item {
   margin: 20px;
   display: flex;
+  flex-wrap: wrap;
   gap: 30px;
   border: 1px solid black;
   padding: 10px;

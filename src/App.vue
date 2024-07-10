@@ -4,7 +4,6 @@
       <VaNavbarItem class="navbar-item-slot">
         <router-link to="/">Карта</router-link>
         <router-link to="/admin">Admin</router-link>
-        <router-link to="/login">Login</router-link>
       </VaNavbarItem>
     </template>
     <template v-if="store.isLogin" #right>

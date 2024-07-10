@@ -45,10 +45,11 @@ import { IWorker } from "../models/worker.model";
 import { IWorkPlace } from "../models/office.model";
 import { Office } from "../services/office.service";
 import { useRoute } from "vue-router";
-import { useForm } from "vuestic-ui";
+import { useForm, useToast } from "vuestic-ui";
 import { EWorkerRoles } from "../enums/workerRole.enum";
 
 const office = new Office();
+const { init } = useToast();
 const { reset } = useForm("formRef");
 const newWorkerId = ref<number>(0);
 const newWorkplaceId = ref<number>(0);
@@ -57,6 +58,7 @@ const worker = ref<IWorker>();
 
 const props = defineProps<{
   workerEdit?: IWorker;
+  isNewWorker: boolean;
 }>();
 
 const { validate } = useForm("formRef");
@@ -85,6 +87,7 @@ worker.value = {
   workerRole: EWorkerRoles.worker,
   birthday: props.workerEdit?.birthday || new Date(),
   accessCode: props.workerEdit?.accessCode || null,
+  isNew: props.isNewWorker,
 };
 
 const okButtonClick = async () => {
@@ -93,6 +96,12 @@ const okButtonClick = async () => {
   } else {
     worker.value.workerId = await office.getNewWorkerId();
     await office.createNewWorker(worker.value);
+    if (props.isNewWorker) {
+      init({
+        message: "Ваша заявка принята, ожидайте",
+        color: "success",
+      });
+    }
   }
 };
 
