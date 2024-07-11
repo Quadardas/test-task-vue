@@ -11,15 +11,21 @@
             : "Свободно"
         }}
       </div>
-      <div v-if="showDetails">
+      <div v-if="showDetails" class="workplace--details">
         <div class="worker--role" v-if="workplace?.workerId !== null">
           Роль сотрудника: {{ worker?.workerRole }}
         </div>
         <div class="workplace--equipment">
           Оборудование: {{ workplace.equipment }}
         </div>
-        <div class="workplace--schedule">
-          Примерный график: {{ workplace.schedule }}
+        <div class="workplace--office-work">
+          Работа {{ workplace.officeWork ? "в офисе" : "удаленная" }}
+        </div>
+        <div v-if="workplace.schedule?.workDay" class="workplace--schedule">
+          Примерный график:
+          {{ formatSchedule(workplace.schedule).workDay }}
+          С {{ formatSchedule(workplace.schedule).workStart }} до
+          {{ formatSchedule(workplace.schedule).workEnd }}
         </div>
       </div>
       <VaButton
@@ -58,6 +64,8 @@ import { Office } from "./services/office.service";
 import { IWorker } from "./models/worker.model";
 import WorkplaceModal from "../components/modals/WorkplaceModal.vue";
 import { useUserStore } from "./stores/user";
+import { format, parseISO } from "date-fns";
+import { ru } from "date-fns/locale";
 
 const worker = ref<IWorker>();
 const officeService = new Office();
@@ -70,6 +78,34 @@ const props = defineProps<{
 const showModal = ref(false);
 const store = useUserStore();
 const isApply = ref(false);
+
+const formatSchedule = (schedule) => {
+  if (!schedule) return {};
+  const formattedWorkDays = Array.isArray(schedule.workDay)
+    ? schedule.workDay
+        .map((day) => {
+          if (day && typeof day.text === "string") {
+            return day.text;
+          }
+          return "";
+        })
+        .join(", ")
+    : "";
+
+  const formattedWorkStart = schedule.workStart
+    ? format(parseISO(schedule.workStart), "HH:mm", { locale: ru })
+    : "";
+
+  const formattedWorkEnd = schedule.workEnd
+    ? format(parseISO(schedule.workEnd), "HH:mm", { locale: ru })
+    : "";
+
+  return {
+    workDay: formattedWorkDays,
+    workStart: formattedWorkStart,
+    workEnd: formattedWorkEnd,
+  };
+};
 
 const emit = defineEmits(["status-updated"]);
 
@@ -95,6 +131,7 @@ const applyWorkplace = (work: IWorkPlace) => {
 
 onBeforeMount(async () => {
   // console.log(props.workplace, "aboba");
+  // console.log(props.workplace.schedule);
 
   try {
     worker.value = await officeService.getWorker(
@@ -121,6 +158,11 @@ onBeforeMount(async () => {
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+    .workplace--details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
   .button-group {
   }

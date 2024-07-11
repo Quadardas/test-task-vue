@@ -5,7 +5,7 @@
       ><div class="worker-id">ID работника: {{ props.worker?.workerId }}</div>
       <div class="worker-role">Роль: {{ props.worker.workerRole }}</div>
       <div class="worker-birthday">
-        День рождения: {{ props.worker.birthday }}
+        День рождения: {{ formatDate(props.worker) }}
       </div>
 
       <VaButtonGroup v-if="props.worker.isNew" class="button-group">
@@ -31,11 +31,21 @@ import { IWorker } from "@/components/models/worker.model";
 import WorkerCreate from "../components/modals/WorkerCreate.vue";
 import { ref } from "vue";
 import { Office } from "../components/services/office.service";
+import { format, parseISO } from "date-fns";
+import { ru } from "date-fns/locale";
 
 const officeService = new Office();
 const props = defineProps<{
   worker: IWorker;
 }>();
+
+const formatDate = (worker) => {
+  const formattedBirthday = worker.birthday
+    ? format(parseISO(worker.birthday), "dd MMMM yyyy", { locale: ru })
+    : "";
+
+  return formattedBirthday;
+};
 const emit = defineEmits(["status-updated"]);
 
 function acceptWorker() {

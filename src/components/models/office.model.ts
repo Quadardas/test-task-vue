@@ -12,7 +12,7 @@ export interface IWorkPlace {
   equipment?: string;
   officeWork: boolean;
   schedule?: {
-    workDay: Array<string>;
+    workDay: string;
     workStart: string;
     workEnd: string;
   };

@@ -10,6 +10,7 @@ import { useRoute } from "vue-router";
 import { IOffice } from "@/components/models/office.model";
 import { Office } from "@/components/services/office.service";
 import { onBeforeMount, ref } from "vue";
+import { useUserStore } from "@/components/stores/user";
 
 const office = ref<IOffice>();
 const officeService = new Office();

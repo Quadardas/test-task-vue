@@ -1,5 +1,8 @@
 <template>
   <div class="cabinet-item">
+    <div v-if="!workplaces.length" class="office-placeholder">
+      Тут пока пусто, но можно создать новые рабочие места, нажав на кабинет
+    </div>
     <WorkplaceItem
       v-for="work in workplaces"
       :key="work.workPlaceId"
@@ -70,6 +73,7 @@ const newWorkplace = async () => {
 
 <style lang="scss">
 .cabinet-item {
+  min-height: 70px;
   margin: 20px;
   display: flex;
   flex-wrap: wrap;

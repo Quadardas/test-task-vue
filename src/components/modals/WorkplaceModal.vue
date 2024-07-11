@@ -1,5 +1,5 @@
 <template>
-  <Modal :show="showModal" @ok="okButtonClick">
+  <Modal :show="showModal" @close="closeModal">
     <template #header>
       <h3>{{ isEdit ? "Редактирование" : "Заявка на рабочее место" }}</h3>
     </template>
@@ -37,7 +37,15 @@
           ]"
           label="Оборудование"
         />
-        <VaDateInput
+        <VaSelect
+          v-model="selectedDays"
+          :options="daysOfWeek"
+          label="Рабочие дни"
+          placeholder="Выберите дни недели"
+          multiple
+          clearable
+        />
+        <!-- <VaDateInput
           v-model="workplace.schedule.workDay"
           :rules="[(v) => validateBirthday(v)]"
           label="Рабочие дни"
@@ -46,7 +54,7 @@
           clearable
           firstWeekday="monday"
           :messages="['Рабочие дни']"
-        />
+        /> -->
         <VaTimeInput
           v-model="workplace.schedule.workStart"
           manual-input
@@ -76,13 +84,24 @@
 
 <script lang="ts" setup>
 import Modal from "@/components/modals/Modal.vue";
-import { onBeforeMount, onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeMount, onBeforeUnmount, ref } from "vue";
 import { IWorker } from "../models/worker.model";
 import { IWorkPlace } from "../models/office.model";
 import { Office } from "../services/office.service";
 import { useRoute } from "vue-router";
 import { useForm } from "vuestic-ui";
 import { useUserStore } from "../stores/user";
+
+const selectedDays = ref<string>();
+const daysOfWeek = [
+  { value: "monday", text: "Понедельник" },
+  { value: "tuesday", text: "Вторник" },
+  { value: "wednesday", text: "Среда" },
+  { value: "thursday", text: "Четверг" },
+  { value: "friday", text: "Пятница" },
+  { value: "saturday", text: "Суббота" },
+  { value: "sunday", text: "Воскресенье" },
+];
 
 const office = new Office();
 const newWorkerId = ref<number>(0);
@@ -161,6 +180,7 @@ const okButtonClick = async () => {
   showModal.value = false;
 
   if (props.isApply) {
+    workplace.value.schedule.workDay = selectedDays.value;
     office.createRequest(worker.value, workplace.value, +route.params.id);
   } else if (worker.value && workplace.value) {
     worker.value.workerId = newWorkerId.value;
@@ -205,7 +225,8 @@ onBeforeMount(async () => {
     schedule: props.selectedWorkplace?.schedule || {},
   };
 
-  workerList.value = await office.getWorkersForSelect();
+  // workerList.value = await office.getWorkersForSelect();
+
   newWorkerId.value = await office.getNewWorkerId();
   newWorkplaceId.value = await office.getNewWorkplaceId();
 });

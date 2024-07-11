@@ -44,6 +44,13 @@
       @close="showModal = false"
       @ok="showModal = false"
     />
+    <WorkplaceEditModal
+      :show="showEditModal"
+      :isEdit="isEdit"
+      :workplace="selectedWorkplace"
+      @close="showEditModal = false"
+      @ok="showEditModal = false"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -64,13 +71,15 @@ const requestWorkplaces = ref<Array<IWorkPlace>>();
 const store = useUserStore();
 const showModalWorker = ref(false);
 const showModal = ref(false);
+const showEditModal = ref(false);
 const isEdit = ref(false);
 const selectedWorkplace = ref();
+
 const editWorkplace = (work: IWorkPlace) => {
   selectedWorkplace.value = work;
   isEdit.value = true;
-  showModal.value = true;
-  // console.log(selectedWorkplace.value);
+  showEditModal.value = true;
+  // console.log(selectedWorkplace.value, "aboba");
 };
 const updateWorkplaces = async () => {
   workplaces.value = await office.getAllWorkPlaces();

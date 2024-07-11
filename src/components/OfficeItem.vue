@@ -1,6 +1,6 @@
 <template>
   <div class="container--office">
-    <div v-if="office" class="office--id">{{ office.officeId }}</div>
+    <div class="office--id">Номер кабинета {{ office.officeId }}</div>
     <CabinetItem
       :workplaces="workplaces"
       :office="office"
@@ -14,7 +14,7 @@ import CabinetItem from "@/components/CabinetItem.vue";
 import { IOffice, IWorkPlace } from "@/components/models/office.model";
 import { Office } from "@/components/services/office.service";
 import { onBeforeMount, ref } from "vue";
-
+import { useUserStore } from "./stores/user";
 const workplaces = ref<Array<IWorkPlace>>([]);
 const officeService = new Office();
 
