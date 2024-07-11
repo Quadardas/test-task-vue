@@ -58,6 +58,7 @@ import { Office } from "./services/office.service";
 import { IWorker } from "./models/worker.model";
 import WorkplaceModal from "../components/modals/WorkplaceModal.vue";
 import { useUserStore } from "./stores/user";
+
 const worker = ref<IWorker>();
 const officeService = new Office();
 const props = defineProps<{

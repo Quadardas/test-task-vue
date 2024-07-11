@@ -40,7 +40,16 @@ const officeService = new Office();
 //     workerId: 1,
 //     equipment: "КАМПУКТЕР",
 //     officeWork: true,
-//     schedule: "всегда",
+//     schedule: {
+//       workDay: [
+//         "2024-07-14T19:00:00.000Z",
+//         "2024-07-15T19:00:00.000Z",
+//         "2024-07-16T19:00:00.000Z",
+//         "2024-07-17T19:00:00.000Z",
+//       ],
+//       workStart: "2024-07-11T03:00:00.000Z",
+//       workEnd: "2024-07-11T12:00:00.000Z",
+//     },
 //     status: true,
 //   },
 //   {
@@ -48,7 +57,16 @@ const officeService = new Office();
 //     workerId: 2,
 //     equipment: "НЕТ КАМПУКТЕРА",
 //     officeWork: true,
-//     schedule: "по субботам",
+//     schedule: {
+//       workDay: [
+//         "2024-07-14T19:00:00.000Z",
+//         "2024-07-15T19:00:00.000Z",
+//         "2024-07-16T19:00:00.000Z",
+//         "2024-07-17T19:00:00.000Z",
+//       ],
+//       workStart: "2024-07-11T03:00:00.000Z",
+//       workEnd: "2024-07-11T12:00:00.000Z",
+//     },
 //     status: true,
 //   },
 //   {
@@ -56,7 +74,16 @@ const officeService = new Office();
 //     workerId: 3,
 //     equipment: "2 КАМПУКТЕРА",
 //     officeWork: true,
-//     schedule: "всегда",
+//     schedule: {
+//       workDay: [
+//         "2024-07-14T19:00:00.000Z",
+//         "2024-07-15T19:00:00.000Z",
+//         "2024-07-16T19:00:00.000Z",
+//         "2024-07-17T19:00:00.000Z",
+//       ],
+//       workStart: "2024-07-11T03:00:00.000Z",
+//       workEnd: "2024-07-11T12:00:00.000Z",
+//     },
 //     status: true,
 //   },
 //   {
@@ -64,7 +91,16 @@ const officeService = new Office();
 //     workerId: 4,
 //     equipment: "3 КАМПУКТЕРА",
 //     officeWork: true,
-//     schedule: "по субботам",
+//     schedule: {
+//       workDay: [
+//         "2024-07-14T19:00:00.000Z",
+//         "2024-07-15T19:00:00.000Z",
+//         "2024-07-16T19:00:00.000Z",
+//         "2024-07-17T19:00:00.000Z",
+//       ],
+//       workStart: "2024-07-11T03:00:00.000Z",
+//       workEnd: "2024-07-11T12:00:00.000Z",
+//     },
 //     status: true,
 //   },
 //   {
@@ -72,7 +108,16 @@ const officeService = new Office();
 //     workerId: 5,
 //     equipment: "4 КАМПУКТЕРА",
 //     officeWork: true,
-//     schedule: "никогда",
+//     schedule: {
+//       workDay: [
+//         "2024-07-14T19:00:00.000Z",
+//         "2024-07-15T19:00:00.000Z",
+//         "2024-07-16T19:00:00.000Z",
+//         "2024-07-17T19:00:00.000Z",
+//       ],
+//       workStart: "2024-07-11T03:00:00.000Z",
+//       workEnd: "2024-07-11T12:00:00.000Z",
+//     },
 //     status: false,
 //   },
 //   {
@@ -80,7 +125,7 @@ const officeService = new Office();
 //     workerId: null,
 //     equipment: "4 КАМПУКТЕРА",
 //     officeWork: true,
-//     schedule: "никогда",
+//     schedule: {},
 //     status: false,
 //   },
 // ];

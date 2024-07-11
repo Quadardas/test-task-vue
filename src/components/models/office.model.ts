@@ -11,5 +11,9 @@ export interface IWorkPlace {
   workerId?: number;
   equipment?: string;
   officeWork: boolean;
-  schedule?: string;
+  schedule?: {
+    workDay: Array<string>;
+    workStart: string;
+    workEnd: string;
+  };
 }

@@ -37,13 +37,33 @@
           ]"
           label="Оборудование"
         />
-        <VaInput
+        <VaDateInput
+          v-model="workplace.schedule.workDay"
+          :rules="[(v) => validateBirthday(v)]"
+          label="Рабочие дни"
+          mode="multiple"
+          manual-input
+          clearable
+          firstWeekday="monday"
+          :messages="['Рабочие дни']"
+        />
+        <VaTimeInput
+          v-model="workplace.schedule.workStart"
+          manual-input
+          :messages="['Начало']"
+        />
+        <VaTimeInput
+          v-model="workplace.schedule.workEnd"
+          manual-input
+          :messages="['Конец']"
+        />
+        <!-- <VaInput
           v-model="workplace.schedule"
           :rules="[
             (value) => (value && value.length > 0) || 'Обязательное поле',
           ]"
           label="Примерный режим работы"
-        />
+        />  -->
         <VaSwitch v-model="workplace.officeWork" label="В офисе" size="small" />
       </VaForm>
     </template>
@@ -63,24 +83,21 @@ import { Office } from "../services/office.service";
 import { useRoute } from "vue-router";
 import { useForm } from "vuestic-ui";
 import { useUserStore } from "../stores/user";
-import router from "@/router";
 
 const office = new Office();
-const { reset } = useForm("formRef");
 const newWorkerId = ref<number>(0);
 const newWorkplaceId = ref<number>(0);
 const route = useRoute();
 const showModal = ref(false);
 const store = useUserStore();
 const workplace = ref<IWorkPlace>();
-// const workplaceEdit = ref<IWorkPlace>();
-// const workerEdit = ref<IWorker>();
 const props = defineProps<{
   isEdit: boolean;
   isApply: boolean;
   selectedWorkplace: IWorkPlace;
   workerEdit: IWorker;
 }>();
+
 const worker = ref<IWorker>({
   workerId: props.workerEdit?.workerId || store.user.workerId,
   name: props.workerEdit?.name || store.user?.name,
@@ -98,6 +115,9 @@ const worker = ref<IWorker>({
 
 const { validate } = useForm("formRef");
 const workerList = ref();
+
+const schedule = () => {};
+
 const userRoles = [
   { value: "admin", text: "Администратор" },
   { value: "worker", text: "Работник" },
@@ -165,9 +185,10 @@ function clearForm() {
     workerId: newWorkerId.value,
     equipment: "",
     officeWork: true,
-    schedule: "",
+    schedule: {},
   };
 }
+
 const handleSaveClick = async () => {
   if (await validate()) {
     await okButtonClick();
@@ -181,7 +202,7 @@ onBeforeMount(async () => {
     workerId: worker.value.workerId,
     equipment: props.selectedWorkplace?.equipment,
     officeWork: props.selectedWorkplace?.officeWork,
-    schedule: props.selectedWorkplace?.schedule,
+    schedule: props.selectedWorkplace?.schedule || {},
   };
 
   workerList.value = await office.getWorkersForSelect();

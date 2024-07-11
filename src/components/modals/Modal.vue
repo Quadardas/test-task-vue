@@ -86,7 +86,7 @@ function onCustomEvent() {
 }
 
 .modal-container {
-  height: 60%;
+  height: fit-content;
   width: 50%;
   max-width: 100%;
   min-width: 500px;
