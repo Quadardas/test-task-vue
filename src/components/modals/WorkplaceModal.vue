@@ -41,40 +41,34 @@
         <VaSelect
           v-model="selectedDays"
           :options="daysOfWeek"
+          :rules="[
+            (value) =>
+              (value && value.toString().length > 0) || 'Обязательное поле',
+          ]"
           label="Рабочие дни"
           placeholder="Выберите дни недели"
           multiple
           clearable
         />
-        <!-- <VaDateInput
-          v-model="workplace.schedule.workDay"
-          :rules="[(v) => validateBirthday(v)]"
-          label="Рабочие дни"
-          mode="multiple"
-          manual-input
-          clearable
-          firstWeekday="monday"
-          :messages="['Рабочие дни']"
-        /> -->
         <VaInput
           v-model="workplace.schedule.workStart"
-          label="Время начала"
+          :rules="[
+            (value) => (value && value.length > 0) || 'Обязательное поле',
+          ]"
+          label="Начало"
           placeholder="ЧЧ:ММ"
           mask="time"
         />
         <VaInput
           v-model="workplace.schedule.workEnd"
-          label="Время конца"
+          :rules="[
+            (value) => (value && value.length > 0) || 'Обязательное поле',
+          ]"
+          label="Конец"
           placeholder="ЧЧ:ММ"
           mask="time"
         />
-        <!-- <VaInput
-          v-model="workplace.schedule"
-          :rules="[
-            (value) => (value && value.length > 0)  'Обязательное поле',
-          ]"
-          label="Примерный режим работы"
-        />  -->
+
         <VaSwitch v-model="workplace.officeWork" label="В офисе" size="small" />
       </VaForm>
     </template>
@@ -94,8 +88,6 @@ import { Office } from "../services/office.service";
 import { useRoute } from "vue-router";
 import { useForm } from "vuestic-ui";
 import { useUserStore } from "../stores/user";
-import { format, parseISO, formatISO9075 } from "date-fns";
-import { ru } from "date-fns/locale";
 
 const selectedDays = ref<string>();
 const daysOfWeek = [
@@ -122,19 +114,12 @@ const props = defineProps<{
   workerEdit?: IWorker;
 }>();
 const worker = ref<IWorker>({
-  workerId: props.workerEdit?.workerId || store.user.workerId,
-  name: props.workerEdit?.name || store.user?.name,
-  workerRole: props.workerEdit?.workerRole || store.user?.workerRole,
-  birthday: props.workerEdit?.birthday || store.user?.birthday,
-  accessCode: props.workerEdit?.accessCode || store.user?.accessCode,
+  workerId: store.user.workerId,
+  name: store.user?.name,
+  workerRole: store.user?.workerRole,
+  birthday: store.user?.birthday,
+  accessCode: store.user?.accessCode,
 });
-// workplace.value = {
-//   workPlaceId: props.selectedWorkplace?.workPlaceId,
-//   workerId: worker.value.workerId,
-//   equipment: props.selectedWorkplace?.equipment,
-//   officeWork: props.selectedWorkplace?.officeWork,
-//   schedule: props.selectedWorkplace?.schedule,
-// };
 
 const { validate } = useForm("formRef");
 const workerList = ref();
@@ -149,53 +134,17 @@ const validateBirthday = (value: Date | null) => {
   if (!value) {
     return "Необходимо выбрать";
   }
-  // const today = new Date();
-  // let yearDiff = today.getFullYear() - value.getFullYear();
-  // const monthDiff = today.getMonth() - value.getMonth();
-
-  // if (monthDiff < 0  (monthDiff === 0 && today.getDate() < value.getDate())) {
-  //   yearDiff--;
-  // }
-
-  // return yearDiff >= 18  "You must be at least 18 years old";
 };
 const emits = defineEmits<{
   (e: "ok"): void;
 }>();
 
-// worker.value = {
-//   workerId: workerList.value.id  newWorkerId.value,
-//   name: workerList.value.name  "",
-//   workerRole: props.workerEdit.workerRole  "",
-//   birthday: new Date(),
-//   accessCode: props.workerEdit.accessCode,
-// };
-
-// workplace.value = {
-//   workPlaceId: props.selectedWorkplace.workPlaceId  newWorkplaceId.value,
-//   workerId: workerList.value.id  newWorkerId.value,
-//   equipment: props.selectedWorkplace.equipment  "",
-//   officeWork: props.selectedWorkplace.officeWork  false,
-//   schedule: props.selectedWorkplace.schedule  "",
-//   status: props.selectedWorkplace.status  false,
-// };
-
 const okButtonClick = async () => {
   showModal.value = false;
-  // console.log(workplace.value?.schedule?.workStart);
-
   if (props.isApply) {
     workplace.value.schedule.workDay = selectedDays.value;
     await office.createRequest(worker.value, workplace.value, +route.params.id);
   }
-  // } else if (worker.value && workplace.value) {
-  //   worker.value.workerId = newWorkerId.value;
-  //   workplace.value.workPlaceId = newWorkplaceId.value;
-  //   workplace.value.workerId = newWorkerId.value;
-  //   office.createNewWorkplace(worker.value, workplace.value, +route.params.id);
-
-  //   await console.log(workplace.value, worker.value);
-  // }
 };
 
 function clearForm() {
@@ -230,8 +179,6 @@ onBeforeMount(async () => {
     officeWork: props.selectedWorkplace?.officeWork,
     schedule: props.selectedWorkplace?.schedule || {},
   };
-
-  // workerList.value = await office.getWorkersForSelect();
 
   newWorkerId.value = await office.getNewWorkerId();
   newWorkplaceId.value = await office.getNewWorkplaceId();

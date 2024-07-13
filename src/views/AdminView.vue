@@ -50,7 +50,7 @@
       :isEdit="isEdit"
       :workplaceEdit="selectedWorkplace"
       @close="showEditModal = false"
-      @ok="showEditModal = false"
+      @ok="showEditModal = false && updateWorkplaces"
     />
   </div>
 </template>

@@ -36,7 +36,7 @@ export const WORKERS: Array<IWorker> = [
     accessCode: "NTY3NTY3",
   },
   {
-    workerId: 5,
+    workerId: 6,
     name: "Жмышенко Валерий Альбертович",
     workerRole: "worker",
     birthday: new Date(1992, 12, 31),

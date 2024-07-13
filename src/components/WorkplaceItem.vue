@@ -25,18 +25,8 @@
           Примерный график:
           {{ formatSchedule(workplace.schedule).workDay }}
           <br />
-          С
-          {{
-            workplace.schedule.workStart.slice(0, 2) +
-            ":" +
-            workplace.schedule.workStart.slice(2, 4)
-          }}
-          до
-          {{
-            workplace.schedule.workEnd.slice(0, 2) +
-            ":" +
-            workplace.schedule.workEnd.slice(2, 4)
-          }}
+          С {{ formatTime(workplace.schedule.workStart) }} до
+          {{ formatTime(workplace.schedule.workEnd) }}
         </div>
       </div>
       <VaButton
@@ -116,6 +106,9 @@ const formatSchedule = (schedule) => {
   return {
     workDay: formattedWorkDays,
   };
+};
+const formatTime = (time: string) => {
+  return `${time.slice(0, 2)}:${time.slice(2, 4)}`;
 };
 
 const emit = defineEmits(["status-updated"]);

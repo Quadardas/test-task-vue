@@ -397,6 +397,49 @@ export class Office {
 
     return promise;
   }
+
+  async updateWorkplace(worker: IWorker, workplace: IWorkPlace) {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        console.log(workplace);
+
+        const workplacesData = JSON.parse(
+          localStorage.getItem("workplaces") || "[]"
+        );
+        const workersData = JSON.parse(localStorage.getItem("workers") || "[]");
+
+        const workplaceIndex = workplacesData.findIndex((work: IWorkPlace) => {
+          return work.workPlaceId === workplace.workPlaceId;
+        });
+
+        if (workplaceIndex !== -1) {
+          const updatedWorkplace = {
+            ...workplacesData[workplaceIndex],
+            workerId: worker.workerId,
+            equipment: workplace.equipment,
+            officeWork: workplace.officeWork,
+            schedule: workplace.schedule,
+          };
+
+          workplacesData[workplaceIndex] = updatedWorkplace;
+
+          localStorage.setItem("workplaces", JSON.stringify(workplacesData));
+          if (worker) {
+            localStorage.setItem("workers", JSON.stringify(workersData));
+          }
+
+          resolve("Data updated");
+        } else {
+          reject("Workplace not found");
+        }
+      } catch (error) {
+        reject("Error: " + error);
+      }
+    });
+
+    return promise;
+  }
+
   async freeWorkplace(workplaceId: number): Promise<IWorkPlace> {
     const promise = new Promise<IWorkPlace>((resolve, reject) => {
       const workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
@@ -552,6 +595,7 @@ export class Office {
             })
           );
           resolve(workerList);
+          console.log(workerList);
         } else {
           reject("No workers");
         }

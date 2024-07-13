@@ -22,7 +22,7 @@ import { useUserStore } from "./components/stores/user";
 import router from "./router";
 import { Office } from "./components/services/office.service";
 import { IOffice } from "./components/models/office.model";
-import { WORKERS } from "./components/constants/workplace.const";
+import { WORKERS } from "./components/constants/workers.const";
 const officeService = new Office();
 const offices = ref<Array<IOffice>>();
 const store = useUserStore();

@@ -9,6 +9,7 @@
         <VaSelect
           v-model="worker.workerId"
           :options="workerList"
+          :placeholder="worker.name"
           :value-by="(option) => option.id"
           :text-by="(option) => option.text"
           :rules="[(v) => v || 'Обязательное поле']"
@@ -27,20 +28,30 @@
           :options="daysOfWeek"
           label="Рабочие дни"
           placeholder="Выберите дни недели"
+          :rules="[
+            (value) =>
+              (value && value.toString().length > 0) || 'Обязательное поле',
+          ]"
           multiple
           clearable
         />
 
         <VaInput
           v-model="workplace.schedule.workStart"
-          label="Время начала"
+          label="Начало"
           placeholder="ЧЧ:ММ"
+          :rules="[
+            (value) => (value && value.length > 0) || 'Обязательное поле',
+          ]"
           mask="time"
         />
         <VaInput
           v-model="workplace.schedule.workEnd"
-          label="Время конца"
+          label="Конец"
           placeholder="ЧЧ:ММ"
+          :rules="[
+            (value) => (value && value.length > 0) || 'Обязательное поле',
+          ]"
           mask="time"
         />
 
@@ -95,11 +106,9 @@ const emits = defineEmits<{
 }>();
 
 const okButtonClick = async () => {
+  await office.updateWorkplace(worker.value, workplace.value);
   if (worker.value && workplace.value) {
-    if (props.isEdit) {
-      // await office.updateWorkplace(worker.value, workplace.value);
-      showModal.value = false;
-    }
+    showModal.value = false;
   }
 };
 
