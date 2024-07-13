@@ -1,6 +1,6 @@
 <template>
   <div class="cabinet-item">
-    <div v-if="!workplaces.length" class="office-placeholder">
+    <div v-if="!workplaces.length && store.isAdmin" class="office-placeholder">
       Тут пока пусто, но можно создать новые рабочие места, нажав на кабинет
     </div>
     <WorkplaceItem
@@ -16,7 +16,7 @@
         workplaces.length != office.maxWorkplaces &&
         store.isAdmin
       "
-      class="new-workplace"
+      class="new-workplaceBTN"
       @click="newWorkplace"
       icon="add"
       color="#DEE5F2"
@@ -80,5 +80,10 @@ const newWorkplace = async () => {
   gap: 30px;
   border: 1px solid black;
   padding: 10px;
+  .new-workplaceBTN {
+    align-self: center;
+    // max-width: 70px;
+    // max-height: 70px;
+  }
 }
 </style>

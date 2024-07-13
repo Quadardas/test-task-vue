@@ -12,6 +12,7 @@
             (value) => (value && value.length > 0) || 'Обязательное поле',
           ]"
           label="ФИО сотрудника"
+          disabled
         />
         <VaSelect
           v-if="!isEdit"
@@ -178,6 +179,7 @@ const emits = defineEmits<{
 
 const okButtonClick = async () => {
   showModal.value = false;
+  console.log(workplace.value?.schedule?.workStart);
 
   if (props.isApply) {
     workplace.value.schedule.workDay = selectedDays.value;

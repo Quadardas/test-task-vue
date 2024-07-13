@@ -1,7 +1,7 @@
 <template>
-  <Modal :show="showModal" @close="closeModal">
+  <Modal :show="showModal">
     <template #header>
-      <h3>{{ isEdit ? "Редактирование" : "Заявка на рабочее место" }}</h3>
+      <h3>Редактирование</h3>
     </template>
 
     <template #body>
@@ -16,7 +16,7 @@
         />
 
         <VaInput
-          v-model="workplace.equipment"
+          v-model="workplaceEdit.equipment"
           :rules="[
             (value) => (value && value.length > 0) || 'Обязательное поле',
           ]"
@@ -30,17 +30,13 @@
           multiple
           clearable
         />
-        <VaTimeInput
-          v-model="workplace.schedule.workStart"
-          manual-input
-          :messages="['Начало']"
+        <VaTimeInput v-model="workStart" manual-input :messages="['Начало']" />
+        <VaTimeInput v-model="workEnd" manual-input :messages="['Конец']" />
+        <VaSwitch
+          v-model="workplaceEdit.officeWork"
+          label="В офисе"
+          size="small"
         />
-        <VaTimeInput
-          v-model="workplace.schedule.workEnd"
-          manual-input
-          :messages="['Конец']"
-        />
-        <VaSwitch v-model="workplace.officeWork" label="В офисе" size="small" />
       </VaForm>
     </template>
 
@@ -58,10 +54,18 @@ import { useForm } from "vuestic-ui";
 import { IWorker } from "../models/worker.model";
 import { IWorkPlace } from "../models/office.model";
 import { Office } from "../services/office.service";
+import { format, parseISO } from "date-fns";
 
-const selectedDays = ref<string[]>([]);
-const workStart = ref<string>("");
-const workEnd = ref<string>("");
+const props = defineProps<{
+  isEdit: boolean;
+  workplaceEdit: IWorkPlace;
+}>();
+const workplace = ref<IWorkPlace>({
+  ...props.workplaceEdit,
+});
+const selectedDays = ref<string>();
+const workStart = ref<Date>();
+const workEnd = ref<Date>();
 const daysOfWeek = [
   { value: "monday", text: "Понедельник" },
   { value: "tuesday", text: "Вторник" },
@@ -77,15 +81,6 @@ const { reset, validate } = useForm("formRef");
 const route = useRoute();
 const showModal = ref(false);
 const worker = ref<IWorker>({});
-const workplace = ref<IWorkPlace>({
-  schedule: { workStart: "", workEnd: "", workDay: [] },
-});
-function closeModal() {}
-
-const props = defineProps<{
-  isEdit: boolean;
-  selectedWorkplace: IWorkPlace;
-}>();
 
 const workerList = ref<Array<{ id: number; text: string }>>([]);
 
@@ -95,9 +90,12 @@ const emits = defineEmits<{
 
 const okButtonClick = async () => {
   showModal.value = false;
+  // console.log(parseISO(props.workplaceEdit.schedule?.workStart));
 
   if (worker.value && workplace.value) {
     if (props.isEdit) {
+      console.log(worker.value, workplace.value);
+
       // await office.updateWorkplace(worker.value, workplace.value);
     }
   }
@@ -116,11 +114,11 @@ function clearForm() {
     workerId: 0,
     equipment: "",
     officeWork: true,
-    schedule: { workStart: "", workEnd: "", workDay: [] },
+    schedule: { workStart: "", workEnd: "", workDay: "" },
   };
-  selectedDays.value = [];
-  workStart.value = "";
-  workEnd.value = "";
+  selectedDays.value = "";
+  workStart.value = new Date();
+  workEnd.value = new Date();
 }
 
 const handleSaveClick = async () => {
@@ -132,22 +130,14 @@ const handleSaveClick = async () => {
 };
 
 onBeforeMount(async () => {
+  // if (props.workplaceEdit?.schedule) {
+  //   workStart.value = parseISO(props.workplaceEdit.schedule.workStart);
+  //   workEnd.value = parseISO(props.workplaceEdit.schedule.workEnd);
+  //   selectedDays.value = props.workplaceEdit.schedule?.workDay;
+  // }
+
   workerList.value = await office.getWorkersForSelect();
 });
-
-watch(
-  () => props.selectedWorkplace,
-  (newWorkplace) => {
-    if (newWorkplace) {
-      worker.value.workerId = newWorkplace.workerId;
-      workplace.value = { ...newWorkplace };
-      selectedDays.value = newWorkplace.schedule?.workDay || [];
-      workStart.value = newWorkplace.schedule?.workStart || "";
-      workEnd.value = newWorkplace.schedule?.workEnd || "";
-    }
-  },
-  { immediate: true }
-);
 </script>
 
 <style lang="scss" scoped>

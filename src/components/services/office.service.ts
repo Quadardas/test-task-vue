@@ -308,7 +308,7 @@ export class Office {
       }
     });
     const data = await promise;
-    console.log(data);
+    // console.log(data);
     return data;
   }
 
@@ -390,6 +390,30 @@ export class Office {
         localStorage.setItem("office", JSON.stringify(offices));
 
         resolve(deletedWorkplace);
+      } else {
+        reject(new Error("Workplace not found"));
+      }
+    });
+
+    return promise;
+  }
+  async freeWorkplace(workplaceId: number): Promise<IWorkPlace> {
+    const promise = new Promise<IWorkPlace>((resolve, reject) => {
+      const workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
+      const index = workplaces.findIndex(
+        (workplace: IWorkPlace) => workplace.workPlaceId === workplaceId
+      );
+      if (index !== -1) {
+        const updatedWorkplace = {
+          ...workplaces[index],
+          workerId: null,
+          equipment: null,
+          officeWork: false,
+          schedule: null,
+        };
+        workplaces[index] = updatedWorkplace;
+        localStorage.setItem("workplaces", JSON.stringify(workplaces));
+        resolve(workplaces[index]);
       } else {
         reject(new Error("Workplace not found"));
       }

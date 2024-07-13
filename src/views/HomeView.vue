@@ -53,7 +53,7 @@ const updateOffices = async () => {
   const fetchedOffices = await officeService.getOffices();
   offices.value = fetchedOffices;
 
-  if (!fetchedOffices || fetchedOffices.length === 0) {
+  if (!fetchedOffices || (fetchedOffices.length === 0 && store.isAdmin)) {
     newOffice();
   }
 };
@@ -137,66 +137,64 @@ const updateOffices = async () => {
 //   },
 //   {
 //     workPlaceId: 5,
-//     workerId: 5,
-//     equipment: "4 КАМПУКТЕРА",
-//     officeWork: true,
-//     schedule: {
-//       workStart: "2024-07-11T03:00:00.918Z",
-//       workEnd: "2024-07-11T12:00:00.886Z",
-//       workDay: [
-//         { value: "monday", text: "Понедельник" },
-//         { value: "tuesday", text: "Вторник" },
-//         { value: "wednesday", text: "Среда" },
-//         { value: "thursday", text: "Четверг" },
-//       ],
-//     },
+//     workerId: null,
+//     equipment: "",
+//     officeWork: false,
+//     schedule: {},
 //   },
 //   {
 //     workPlaceId: 6,
 //     workerId: null,
-//     equipment: "4 КАМПУКТЕРА",
-//     officeWork: true,
+//     equipment: "",
+//     officeWork: false,
 //     schedule: {},
 //   },
 // ];
 
-const aboba2 = [
-  {
-    workerId: 1,
-    name: "Александр",
-    workerRole: "admin",
-    birthday: new Date(1995, 6, 2),
-    accessCode: 123456,
-  },
-  {
-    workerId: 2,
-    name: "ВИКТОР",
-    workerRole: "worker",
-    birthday: new Date(1987, 1, 11),
-    accessCode: 234567,
-  },
-  {
-    workerId: 3,
-    name: "НИКИТА",
-    workerRole: "worker",
-    birthday: new Date(1989, 6, 10),
-    accessCode: 345678,
-  },
-  {
-    workerId: 4,
-    name: "АБОБА",
-    workerRole: "worker",
-    birthday: new Date(1986, 4, 22),
-    accessCode: 456789,
-  },
-  {
-    workerId: 5,
-    name: "ЖИЖА",
-    workerRole: "worker",
-    birthday: new Date(1999, 1, 23),
-    accessCode: 567890,
-  },
-];
+// const aboba2 = [
+//   {
+//     workerId: 1,
+//     name: "Иванов Иван Иванович",
+//     workerRole: "admin",
+//     birthday: new Date(1995, 6, 2),
+//     accessCode: "MTIzNDU2",
+//   },
+//   {
+//     workerId: 2,
+//     name: "Петров Виктор Валентинович",
+//     workerRole: "worker",
+//     birthday: new Date(1987, 1, 11),
+//     accessCode: "MjM0NTY3",
+//   },
+//   {
+//     workerId: 3,
+//     name: "Сидоров Терентий Викторович",
+//     workerRole: "worker",
+//     birthday: new Date(1989, 6, 10),
+//     accessCode: "MzQ1Njc4",
+//   },
+//   {
+//     workerId: 4,
+//     name: "Иванов Андрей Петрович",
+//     workerRole: "worker",
+//     birthday: new Date(1993, 2, 24),
+//     accessCode: "NDU2NDU2",
+//   },
+//   {
+//     workerId: 5,
+//     name: "Шишкин Александр Александрович",
+//     workerRole: "worker",
+//     birthday: new Date(2001, 5, 9),
+//     accessCode: "NTY3NTY3",
+//   },
+//   {
+//     workerId: 5,
+//     name: "Жмышенко Валерий Альбертович",
+//     workerRole: "worker",
+//     birthday: new Date(1992, 12, 31),
+//     accessCode: "Njc4Njc4",
+//   },
+// ];
 
 onBeforeMount(() => {
   updateOffices();

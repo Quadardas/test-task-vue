@@ -33,11 +33,21 @@
         @click.stop="applyWorkplace"
         >Подать заявку</VaButton
       >
-      <VaButton
+      <!-- <VaButton
         v-if="!disableButton && !approvable"
         @click.stop="deleteWorplace"
         >Удалить</VaButton
+      > -->
+      <VaButtonGroup
+        v-if="!disableButton && !approvable"
+        class="button-group"
+        preset="secondary"
       >
+        <VaButton @click.stop="freeWorkplace"> Освободить </VaButton>
+        <VaButton @click.stop="deleteWorplace">
+          Удалить рабочее место
+        </VaButton>
+      </VaButtonGroup>
     </VaCardContent>
     <WorkplaceModal
       :show="showModal"
@@ -113,6 +123,10 @@ function deleteWorplace() {
   officeService.deleteWorkplace(props.workplace.workPlaceId);
   emit("status-updated");
 }
+function freeWorkplace() {
+  officeService.freeWorkplace(props.workplace.workPlaceId);
+  emit("status-updated");
+}
 
 async function acceptRequest(wokrplaceId: number) {
   await officeService.acceptRequest(wokrplaceId, worker.value?.workerId);
@@ -148,6 +162,7 @@ onBeforeMount(async () => {
 <style lang="scss" scoped>
 .workplace-item {
   margin: 10px;
+  max-width: 600px;
   height: fit-content;
   padding: 5px;
   .wokrplace--id {

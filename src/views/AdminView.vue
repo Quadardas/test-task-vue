@@ -1,5 +1,5 @@
 <template>
-  <div class="container-admin">
+  <div v-if="store.isAdmin" class="container-admin">
     <div class="worker-list">
       <p>Список работников</p>
       <WorkerItem
@@ -12,7 +12,7 @@
       <WorkerCreate
         :show="showModalWorker"
         @close="showModalWorker = false"
-        @ok="showModalWorker = false"
+        @ok="showModalWorker = false && updateWorkers"
       />
     </div>
     <div class="workplace-list">
@@ -37,17 +37,17 @@
         @status-updated="updateWorkplaces"
       />
     </div>
-    <WorkplaceModal
+    <!-- <WorkplaceModal
       :show="showModal"
       :isEdit="isEdit"
       :workplace="selectedWorkplace"
       @close="showModal = false"
       @ok="showModal = false"
-    />
+    /> -->
     <WorkplaceEditModal
       :show="showEditModal"
       :isEdit="isEdit"
-      :workplace="selectedWorkplace"
+      :workplaceEdit="selectedWorkplace"
       @close="showEditModal = false"
       @ok="showEditModal = false"
     />

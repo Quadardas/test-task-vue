@@ -14,7 +14,7 @@
           Отклонить
         </VaButton>
       </VaButtonGroup>
-      <VaButton v-else @click.stop="deleteWorker"
+      <VaButton v-else preset="secondary" @click.stop="deleteWorker"
         >Удалить</VaButton
       ></VaCardContent
     >

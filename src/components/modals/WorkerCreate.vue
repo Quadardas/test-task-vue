@@ -77,7 +77,7 @@ const validateBirthday = (value: Date | null) => {
 
   // return yearDiff >= 18 || "You must be at least 18 years old";
 };
-const emits = defineEmits<{
+const emit = defineEmits<{
   (e: "ok"): void;
 }>();
 
@@ -86,7 +86,7 @@ worker.value = {
   name: props.workerEdit?.name || "",
   workerRole: EWorkerRoles.worker,
   birthday: props.workerEdit?.birthday || new Date(),
-  accessCode: props.workerEdit?.accessCode || null,
+  accessCode: props.workerEdit?.accessCode,
   isNew: props.isNewWorker,
 };
 
@@ -111,15 +111,20 @@ function clearForm() {
     name: "",
     workerRole: "",
     birthday: new Date(),
+    accessCode: "",
   };
 }
 const handleSaveClick = async () => {
   if (await validate()) {
     await okButtonClick();
-    emits("ok");
+    emit("ok");
     clearForm();
   }
 };
+
+// onBeforeMount(() => {
+//   console.log(props.workerEdit?.accessCode);
+// });
 </script>
 <style lang="scss" scoped>
 .va-form {
