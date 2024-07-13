@@ -62,8 +62,8 @@ const newWorkplace = async () => {
       workPlaceId: await officeService.getNewWorkplaceId(),
       workerId: null,
       equipment: null,
-      officeWork: null,
-      schedule: null,
+      officeWork: false,
+      schedule: { workStart: "", workEnd: "", workDay: [] },
     },
     props.office.officeId
   );

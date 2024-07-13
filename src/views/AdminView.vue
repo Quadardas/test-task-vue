@@ -45,6 +45,7 @@
       @ok="showModal = false"
     /> -->
     <WorkplaceEditModal
+      v-if="showEditModal"
       :show="showEditModal"
       :isEdit="isEdit"
       :workplaceEdit="selectedWorkplace"

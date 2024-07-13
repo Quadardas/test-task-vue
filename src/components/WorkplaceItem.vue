@@ -21,11 +21,22 @@
         <div class="workplace--office-work">
           Работа {{ workplace.officeWork ? "в офисе" : "удаленная" }}
         </div>
-        <div v-if="workplace.schedule?.workDay" class="workplace--schedule">
+        <div v-if="workplace.schedule?.workStart" class="workplace--schedule">
           Примерный график:
           {{ formatSchedule(workplace.schedule).workDay }}
-          С {{ formatSchedule(workplace.schedule).workStart }} до
-          {{ formatSchedule(workplace.schedule).workEnd }}
+          <br />
+          С
+          {{
+            workplace.schedule.workStart.slice(0, 2) +
+            ":" +
+            workplace.schedule.workStart.slice(2, 4)
+          }}
+          до
+          {{
+            workplace.schedule.workEnd.slice(0, 2) +
+            ":" +
+            workplace.schedule.workEnd.slice(2, 4)
+          }}
         </div>
       </div>
       <VaButton
@@ -102,18 +113,8 @@ const formatSchedule = (schedule) => {
         .join(", ")
     : "";
 
-  const formattedWorkStart = schedule.workStart
-    ? format(parseISO(schedule.workStart), "HH:mm", { locale: ru })
-    : "";
-
-  const formattedWorkEnd = schedule.workEnd
-    ? format(parseISO(schedule.workEnd), "HH:mm", { locale: ru })
-    : "";
-
   return {
     workDay: formattedWorkDays,
-    workStart: formattedWorkStart,
-    workEnd: formattedWorkEnd,
   };
 };
 
@@ -142,7 +143,6 @@ const applyWorkplace = (work: IWorkPlace) => {
 
   // console.log(selectedWorkplace.value);
 };
-
 onBeforeMount(async () => {
   // console.log(props.workplace, "aboba");
   // console.log(props.workplace.schedule);
@@ -177,6 +177,10 @@ onBeforeMount(async () => {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      gap: 5px;
+      .workplace--schedule {
+        text-align: left;
+      }
     }
   }
   .button-group {
