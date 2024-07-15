@@ -82,8 +82,6 @@ const newWorkplace = async () => {
   padding: 10px;
   .new-workplaceBTN {
     align-self: center;
-    // max-width: 70px;
-    // max-height: 70px;
   }
 }
 </style>

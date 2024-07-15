@@ -34,11 +34,6 @@
         @click.stop="applyWorkplace"
         >Подать заявку</VaButton
       >
-      <!-- <VaButton
-        v-if="!disableButton && !approvable"
-        @click.stop="deleteWorplace"
-        >Удалить</VaButton
-      > -->
       <VaButtonGroup
         v-if="!disableButton && !approvable"
         class="button-group"
@@ -133,13 +128,8 @@ async function declineRequest(wokrplaceId: number) {
 const applyWorkplace = (work: IWorkPlace) => {
   isApply.value = true;
   showModal.value = true;
-
-  // console.log(selectedWorkplace.value);
 };
 onBeforeMount(async () => {
-  // console.log(props.workplace, "aboba");
-  // console.log(props.workplace.schedule);
-
   try {
     worker.value = await officeService.getWorker(
       props.workplace.workPlaceId,

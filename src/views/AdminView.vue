@@ -37,13 +37,7 @@
         @status-updated="updateWorkplaces"
       />
     </div>
-    <!-- <WorkplaceModal
-      :show="showModal"
-      :isEdit="isEdit"
-      :workplace="selectedWorkplace"
-      @close="showModal = false"
-      @ok="showModal = false"
-    /> -->
+
     <WorkplaceEditModal
       v-if="showEditModal"
       :show="showEditModal"
@@ -80,7 +74,6 @@ const editWorkplace = (work: IWorkPlace) => {
   selectedWorkplace.value = work;
   isEdit.value = true;
   showEditModal.value = true;
-  // console.log(selectedWorkplace.value, "aboba");
 };
 const updateWorkplaces = async () => {
   workplaces.value = await office.getAllWorkPlaces();
@@ -96,8 +89,6 @@ onBeforeMount(async () => {
   workers.value = await office.getAllWorkers();
   workplaces.value = await office.getAllWorkPlaces();
   requestWorkplaces.value = await office.getRequestWorkplace();
-
-  // console.log(requestWorkplaces.value, "Заявки");
 });
 </script>
 <style lang="scss">

@@ -5,19 +5,6 @@ import { IWorker } from "../models/worker.model";
 export class Office {
   private offices = ref<Array<IOffice>>([]);
 
-  // public getOffices(): Array<IOffice> {
-  //   return this.offices.value;
-  // }
-  // constructor() {
-  //   this.initOffices();
-  // }
-
-  // public initOffices(): void {
-  //   const officesFromLS = localStorage.getItem("office");
-  //   if (officesFromLS) {
-  //     this.offices.value = JSON.parse(officesFromLS);
-  //   }
-  // }
   public async getOffices(): Promise<IOffice[]> {
     const promise = new Promise<IOffice[]>((resolve, reject) => {
       const officeData = JSON.parse(localStorage.getItem("office") || "[]");
@@ -27,12 +14,10 @@ export class Office {
       resolve(officeData);
     });
     const data = await promise;
-    //console.log(data);
 
     return data;
   }
   public async getOneOffice(officeId: number): Promise<IOffice> {
-    //console.log(officeId, "это гет 1 офис");
     const promise = new Promise<IOffice>((resolve, reject) => {
       const officeData = JSON.parse(localStorage.getItem("office") || "[]");
       const office = officeData.find(
@@ -44,7 +29,6 @@ export class Office {
       resolve(office);
     });
     const data = await promise;
-    //console.log(data);
 
     return data;
   }
@@ -66,7 +50,6 @@ export class Office {
       resolve(workplaces);
     });
     const data = await promise;
-    // console.log(data);
 
     return data;
   }
@@ -85,7 +68,6 @@ export class Office {
     });
 
     const data = await promise;
-    // console.log(data);
 
     return data;
   }
@@ -99,23 +81,10 @@ export class Office {
     });
 
     const data = await promise;
-    // console.log(data);
 
     return data;
   }
-  // public async createRequest(workplace: IWorkPlace): Promise<IWorkPlace[]> {
-  //   const promise = new Promise<IWorkPlace[]>((resolve, reject) => {
-  //     const workplacesData = JSON.parse(
-  //       localStorage.getItem("requestWorkplaces") || "[]"
-  //     );
-  //     workplacesData.push(workplace);
-  //     localStorage.setItem("requestWorkplaces", JSON.stringify(workplacesData));
-  //     resolve(workplacesData);
-  //     reject(new Error(`Workplace`));
-  //   });
-  //   const data = promise;
-  //   return data;
-  // }
+
   async createRequest(
     worker: IWorker,
     workplace: IWorkPlace,
@@ -147,12 +116,11 @@ export class Office {
           reject("Office not found");
           return;
         }
-        // localStorage.setItem("office", JSON.stringify(officeData));
+
         localStorage.setItem(
           "requestWorkplaces",
           JSON.stringify(requestworkplacesData)
         );
-        // localStorage.setItem("workplaces", JSON.stringify(workplacesData));
 
         resolve("Data updated");
       } catch (error) {
@@ -174,11 +142,9 @@ export class Office {
     });
 
     const data = await promise;
-    // console.log(data);
 
     return data;
   }
-  // поменять на перенос из нового ls в старый
 
   public async acceptRequest(
     workplaceId: number,
@@ -258,7 +224,7 @@ export class Office {
       }
     });
     const data = await promise;
-    // console.log(data);
+
     return data;
   }
 
@@ -290,7 +256,6 @@ export class Office {
       resolve(worker);
     });
     const data = await promise;
-    // console.log(data);
 
     return data;
   }
@@ -326,7 +291,7 @@ export class Office {
     });
 
     const data = await promise;
-    //console.log(data);
+
     return data;
   }
 

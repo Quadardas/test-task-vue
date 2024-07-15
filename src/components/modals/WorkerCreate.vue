@@ -122,9 +122,7 @@ const handleSaveClick = async () => {
   }
 };
 
-// onBeforeMount(() => {
-//   console.log(props.workerEdit?.accessCode);
-// });
+
 </script>
 <style lang="scss" scoped>
 .va-form {
